@@ -1,100 +1,98 @@
+import React, { useRef, useEffect } from 'react'
+
 import {
-  IonContent,
-  IonIcon,
-  IonItem,
-  IonLabel,
-  IonList,
-  IonListHeader,
-  IonMenu,
-  IonMenuToggle,
-  IonNote,
-} from '@ionic/react';
+	IonContent,
+	IonIcon,
+	IonList,
+	IonListHeader,
+	IonMenu,
+	IonMenuToggle,
+	IonNote,
+	IonAccordion,
+	IonAccordionGroup,
+	IonItem,
+	IonLabel
+} from '@ionic/react'
 
-import { useLocation } from 'react-router-dom';
-import { archiveOutline, archiveSharp, bookmarkOutline, heartOutline, heartSharp, mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, trashOutline, trashSharp, warningOutline, warningSharp } from 'ionicons/icons';
-import './Menu.css';
+import { bookOutline, documentTextOutline } from 'ionicons/icons'
 
-interface AppPage {
-  url: string;
-  iosIcon: string;
-  mdIcon: string;
-  title: string;
+import { useLocation } from 'react-router-dom'
+
+import './Menu.css'
+
+import tableOfContent from '../content/table-of-content'
+import { TableOfContent as TableOfContentType } from '../content/table-of-content'
+
+interface TableOfContentProps {
+	content: TableOfContentType
+	parents: string[]
 }
 
-const appPages: AppPage[] = [
-  {
-    title: 'Inbox',
-    url: '/page/Inbox',
-    iosIcon: mailOutline,
-    mdIcon: mailSharp
-  },
-  {
-    title: 'Outbox',
-    url: '/page/Outbox',
-    iosIcon: paperPlaneOutline,
-    mdIcon: paperPlaneSharp
-  },
-  {
-    title: 'Favorites',
-    url: '/page/Favorites',
-    iosIcon: heartOutline,
-    mdIcon: heartSharp
-  },
-  {
-    title: 'Archived',
-    url: '/page/Archived',
-    iosIcon: archiveOutline,
-    mdIcon: archiveSharp
-  },
-  {
-    title: 'Trash',
-    url: '/page/Trash',
-    iosIcon: trashOutline,
-    mdIcon: trashSharp
-  },
-  {
-    title: 'Spam',
-    url: '/page/Spam',
-    iosIcon: warningOutline,
-    mdIcon: warningSharp
-  }
-];
+const TableOfContent: React.FC<TableOfContentProps> = ({
+	content,
+	parents
+}) => {
+	const accordionGroup = useRef<null | HTMLIonAccordionGroupElement>(null)
 
-const labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
+	useEffect(() => {
+		if (!accordionGroup.current) {
+			return
+		}
+
+		// accordionGroup.current.value = ['first', 'third']
+	}, [])
+
+	return (
+		<IonAccordionGroup ref={accordionGroup} multiple={true}>
+			{content.map(item => {
+				const { title, type } = item
+				if (type === 'page')
+					return (
+						<IonMenuToggle
+							key={`${parents.join('-') + title}`}
+							autoHide={false}
+						>
+							<IonItem routerLink='/bjbjbj' title={JSON.stringify(parents)}>
+								<IonIcon slot='start' md={documentTextOutline} />
+								<IonLabel>{title}</IonLabel>
+							</IonItem>
+						</IonMenuToggle>
+					)
+				if (type === 'folder') {
+					const { content } = item
+					return (
+						<IonAccordion
+							key={`${parents.join('-') + title}`}
+							value={Date.now() + Math.random() + ''}
+						>
+							<IonItem slot='header' color='light'>
+								<IonIcon slot='start' md={bookOutline} />
+								<IonLabel>{title}</IonLabel>
+							</IonItem>
+							<div className='ion-padding' slot='content'>
+								<TableOfContent
+									content={content}
+									parents={[...parents, title]}
+								/>
+							</div>
+						</IonAccordion>
+					)
+				} else return <></>
+			})}
+		</IonAccordionGroup>
+	)
+}
 
 const Menu: React.FC = () => {
-  const location = useLocation();
+	const location = useLocation()
 
-  return (
-    <IonMenu contentId="main" type="overlay">
-      <IonContent>
-        <IonList id="inbox-list">
-          <IonListHeader>Inbox</IonListHeader>
-          <IonNote>hi@ionicframework.com</IonNote>
-          {appPages.map((appPage, index) => {
-            return (
-              <IonMenuToggle key={index} autoHide={false}>
-                <IonItem className={location.pathname === appPage.url ? 'selected' : ''} routerLink={appPage.url} routerDirection="none" lines="none" detail={false}>
-                  <IonIcon slot="start" ios={appPage.iosIcon} md={appPage.mdIcon} />
-                  <IonLabel>{appPage.title}</IonLabel>
-                </IonItem>
-              </IonMenuToggle>
-            );
-          })}
-        </IonList>
+	return (
+		<IonMenu contentId='main' type='overlay'>
+			<IonContent>
+				<TableOfContent content={tableOfContent} parents={[]} />
+			</IonContent>
+		</IonMenu>
+	)
+}
 
-        <IonList id="labels-list">
-          <IonListHeader>Labels</IonListHeader>
-          {labels.map((label, index) => (
-            <IonItem lines="none" key={index}>
-              <IonIcon slot="start" icon={bookmarkOutline} />
-              <IonLabel>{label}</IonLabel>
-            </IonItem>
-          ))}
-        </IonList>
-      </IonContent>
-    </IonMenu>
-  );
-};
-
-export default Menu;
+export default Menu
