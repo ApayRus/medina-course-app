@@ -29,27 +29,30 @@ import '@ionic/react/css/display.css'
 import './theme/variables.css'
 
 import SupabaseProvider from './supabase/SupabaseProvider'
+import NavigationProvider from './components/NavigationProvider'
 
 setupIonicReact()
 
 const App: React.FC = () => {
 	return (
 		<SupabaseProvider>
-			<IonApp>
-				<IonReactRouter>
-					<IonSplitPane contentId='main'>
-						<Menu />
-						<IonRouterOutlet id='main'>
-							<Route path='/' exact={true}>
-								<Redirect to='/page/Inbox' />
-							</Route>
-							<Route path='/page/:name' exact={true}>
-								<Page />
-							</Route>
-						</IonRouterOutlet>
-					</IonSplitPane>
-				</IonReactRouter>
-			</IonApp>
+			<NavigationProvider>
+				<IonApp>
+					<IonReactRouter>
+						<IonSplitPane contentId='main'>
+							<Menu />
+							<IonRouterOutlet id='main'>
+								<Route path='/' exact={true}>
+									<Redirect to='/page/Inbox' />
+								</Route>
+								<Route path='/page/:name+'>
+									<Page />
+								</Route>
+							</IonRouterOutlet>
+						</IonSplitPane>
+					</IonReactRouter>
+				</IonApp>
+			</NavigationProvider>
 		</SupabaseProvider>
 	)
 }
