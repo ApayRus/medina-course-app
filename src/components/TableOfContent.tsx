@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useContext } from 'react'
 
 import {
 	IonIcon,
@@ -10,6 +10,7 @@ import {
 } from '@ionic/react'
 
 import { bookOutline, documentTextOutline } from 'ionicons/icons'
+import { NavigationContext } from './NavigationProvider'
 
 export interface File {
 	type: 'file'
@@ -24,10 +25,10 @@ export interface Folder {
 	content: Array<File | Folder>
 }
 
-export type TableOfContent = Array<File | Folder> | []
+export type TableOfContentType = Array<File | Folder> | []
 
 interface TableOfContentProps {
-	content: TableOfContent
+	content: TableOfContentType
 	parents: string[]
 }
 
@@ -36,27 +37,33 @@ const TableOfContentComponent: React.FC<TableOfContentProps> = ({
 	parents
 }) => {
 	const accordionGroup = useRef<null | HTMLIonAccordionGroupElement>(null)
-
 	useEffect(() => {
 		if (!accordionGroup.current) {
 			return
 		}
-
-		// accordionGroup.current.value = ['/Book 1', '/Book 2'] -- opened accordions
+		accordionGroup.current.value = ['book1'] // opened accordions
 	}, [])
+
+	const { currentPage } = useContext(NavigationContext)
 
 	return (
 		<IonAccordionGroup ref={accordionGroup} multiple={true}>
 			{content.map(item => {
 				const { name, type } = item
+				const path = [...parents, name].join('/')
+				const isActive = path === currentPage
 				if (type === 'file')
 					return (
-						<IonMenuToggle key={`${parents.join('-') + name}`} autoHide={false}>
+						<IonMenuToggle key={path} autoHide={false}>
 							<IonItem
-								routerLink={`/page/${[...parents, name].join('/')}`}
-								title={JSON.stringify(parents)}
+								routerLink={`/page/${path}`}
+								color={isActive ? 'secondary' : ''}
 							>
-								<IonIcon slot='start' md={documentTextOutline} />
+								<IonIcon
+									slot='start'
+									md={documentTextOutline}
+									style={{ color: isActive ? 'white' : '' }}
+								/>
 								<IonLabel>{name}</IonLabel>
 							</IonItem>
 						</IonMenuToggle>
@@ -64,10 +71,7 @@ const TableOfContentComponent: React.FC<TableOfContentProps> = ({
 				if (type === 'folder') {
 					const { content } = item
 					return (
-						<IonAccordion
-							key={`${parents.join('-') + name}`}
-							value={`${[parents, name].join('/')}`}
-						>
+						<IonAccordion key={path} value={path}>
 							<IonItem slot='header' color='light'>
 								<IonIcon slot='start' md={bookOutline} />
 								<IonLabel>{name}</IonLabel>

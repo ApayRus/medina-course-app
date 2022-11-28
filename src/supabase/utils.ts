@@ -1,7 +1,11 @@
 // import { TableOfContent, File, Folder } from '../components/TableOfContent'
+import { TableOfContentType } from '../components/TableOfContent'
 import supabase from './client'
 
-export const getBucketFiles = async (bucketName: string, dirs: string[]) => {
+export const getBucketFiles = async (
+	bucketName: string,
+	dirs: string[]
+): Promise<TableOfContentType> => {
 	const path = dirs.join('/')
 
 	const { data: folderContent } = await supabase.storage
