@@ -1,0 +1,33 @@
+ion-range {
+	/* --bar-background: #a2d2ff;
+	--bar-background-active: #bde0fe; */
+	--bar-height: 16px;
+	--bar-border-radius: 8px;
+	/* 
+	--knob-background: #ffc8dd;*/
+	--knob-size: 32px;
+	/*
+	--pin-background: #ffafcc;
+	--pin-color: #fff; */
+}
+
+.timeText {
+	/* position: absolute;
+	top: 0;
+	right: 0;
+	margin-right: 20px; */
+	font-size: large;
+	font-weight: bold;
+}
+
+.controls ion-button {
+	--border-radius: 50%;
+	height: 50px;
+	width: 50px;
+}
+
+.controls {
+	display: flex;
+	justify-content: space-around;
+	margin-top: 12px;
+}
