@@ -29,6 +29,7 @@ import '@ionic/react/css/display.css'
 import './theme/variables.css'
 
 import NavigationProvider from './components/NavigationProvider'
+import MainPage from './pages/Main'
 
 setupIonicReact()
 
@@ -41,7 +42,7 @@ const App: React.FC = () => {
 						<Menu />
 						<IonRouterOutlet id='main'>
 							<Route path='/' exact={true}>
-								<Redirect to='/page/Inbox' />
+								<MainPage />
 							</Route>
 							<Route path='/page/:path+'>
 								<Page />
