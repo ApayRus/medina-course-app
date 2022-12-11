@@ -7,11 +7,10 @@ import {
 } from '@ionic/react'
 import { useState, useEffect, useContext } from 'react'
 import { useParams } from 'react-router'
-import ExploreContainer from '../components/ExploreContainer'
 import Player from '../components/Player'
 import supabase from '../supabase/client'
 import Footer from '../components/PageFooter'
-import './Page.css'
+import styles from './Page.module.css'
 import { NavigationContext } from '../components/NavigationProvider'
 
 const Page: React.FC = () => {
@@ -38,9 +37,9 @@ const Page: React.FC = () => {
 				</IonToolbar>
 			</IonHeader>
 			<IonContent fullscreen>
-				<ExploreContainer path={path}>
+				<div className={styles.container}>
 					<Player mediaLink={mediaLink} />
-				</ExploreContainer>
+				</div>
 			</IonContent>
 			<Footer />
 		</IonPage>

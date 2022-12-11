@@ -13,6 +13,7 @@ import {
 } from 'ionicons/icons'
 import { useContext } from 'react'
 import { FlatTableOfContentType, NavigationContext } from './NavigationProvider'
+import styles from '../pages/Page.module.css'
 
 const getNextPagePath = (
 	flatTableOfContent: FlatTableOfContentType,
@@ -52,8 +53,8 @@ const Footer = () => {
 						<IonIcon size='large' color='primary' icon={PreviousChapterIcon} />
 					</IonButton>
 				</IonButtons>
-				<IonButtons className='menuButtonContainer'>
-					<IonMenuButton />
+				<IonButtons className={styles.menuButtonContainer}>
+					<IonMenuButton color='primary' />
 				</IonButtons>
 				<IonButtons slot='end'>
 					<IonButton onClick={goNext}>

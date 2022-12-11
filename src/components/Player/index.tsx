@@ -6,7 +6,7 @@ import {
 	playBack as PlayBackIcon
 } from 'ionicons/icons'
 import { useRef } from 'react'
-import './Player.css'
+import styles from './Player.module.css'
 import usePlayer from './usePlayer'
 import { formatSecondsToTime } from 'frazy-parser'
 
@@ -32,7 +32,7 @@ const Player = ({ mediaLink }: Props) => {
 	} = usePlayer(mediaRef)
 
 	return (
-		<div style={{ position: 'relative' }}>
+		<div className={styles.playerContainer}>
 			<audio
 				ref={mediaRef}
 				onTimeUpdate={onTimeUpdate}
@@ -49,20 +49,18 @@ const Player = ({ mediaLink }: Props) => {
 					onIonChange={onRangeChange}
 					value={playerState.currentTimePercentage}
 				></IonRange>
-				<div className='timeText'>
+				<div className={styles.timeText}>
 					<IonText color='primary' title='current time'>
 						{formatSecondsToTime(playerState.currentTime)}
 					</IonText>
-					<IonText color='primary'>{` / `}</IonText>
 					<IonText color='primary' title='remained'>
 						{'-' + formatSecondsToTime(playerState.remainedTime)}
 					</IonText>
-					<IonText color='primary'>{` / `}</IonText>
 					<IonText color='primary' title='duration'>
 						{formatSecondsToTime(playerState.duration)}
 					</IonText>
 				</div>
-				<div className='controls'>
+				<div className={styles.controls}>
 					<IonButton size='small' onClick={minus5}>
 						<IonIcon icon={PlayBackIcon}></IonIcon>
 					</IonButton>
