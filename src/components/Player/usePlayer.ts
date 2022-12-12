@@ -9,22 +9,25 @@ interface PlayerState {
 	isSeeking: boolean
 }
 
+const playerInitialState = {
+	currentTime: 0,
+	duration: 0,
+	remainedTime: 0,
+	currentTimePercentage: 0,
+	isPlaying: false,
+	isSeeking: false
+}
+
 const usePlayer = (mediaRef: RefObject<HTMLMediaElement>) => {
-	const [playerState, setPlayerState] = useState<PlayerState>({
-		currentTime: 0,
-		duration: 0,
-		remainedTime: 0,
-		currentTimePercentage: 0,
-		isPlaying: false,
-		isSeeking: false
-	})
+	const [playerState, setPlayerState] =
+		useState<PlayerState>(playerInitialState)
 
 	useEffect(() => {
 		if (mediaRef.current) {
 			mediaRef.current.onloadedmetadata = () => {
 				setPlayerState(oldState => {
 					const { duration } = mediaRef.current!
-					return { ...oldState, duration }
+					return { ...playerInitialState, duration }
 				})
 			}
 		}
