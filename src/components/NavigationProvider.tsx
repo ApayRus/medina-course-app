@@ -38,11 +38,13 @@ const getFlatTableOfContent = (
 			const { type, title, path } = item
 			if (type === 'folder') {
 				return [
-					{ type, title, path: [...parents, path].join('/') },
+					{ type, title, path: '/' + [...parents, path].join('/') },
 					...getFlatTableOfContent(item.content, [...parents, path])
 				]
+			} else if (type === 'file') {
+				return { ...item, path: '/media/' + [...parents, path].join('/') }
 			} else {
-				return { ...item, path: [...parents, path].join('/') }
+				return { ...item, path: '/' + [...parents, path].join('/') }
 			}
 		})
 		.flat()

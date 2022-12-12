@@ -11,58 +11,88 @@ import {
 	chevronBack as PreviousChapterIcon,
 	chevronForward as NextChapterIcon
 } from 'ionicons/icons'
-import { useContext } from 'react'
-import { FlatTableOfContentType, NavigationContext } from './NavigationProvider'
+import { useContext, useEffect, useState } from 'react'
+import {
+	FlatNavItem,
+	FlatTableOfContentType,
+	NavigationContext
+} from './NavigationProvider'
 import styles from './PageFooter.module.css'
 import { useLocation } from 'react-router'
 
-const getNextPagePath = (
+const getCurrentPageIndex = (
 	flatTableOfContent: FlatTableOfContentType,
 	currentPage: string
 ) => {
 	const index = flatTableOfContent.findIndex(elem => elem.path === currentPage)
-	return flatTableOfContent[index + 1]?.path || ''
+	return index
 }
 
-const getPrevPagePath = (
+const getItemByIndex = (
 	flatTableOfContent: FlatTableOfContentType,
-	currentPage: string
+	index: number
 ) => {
-	const index = flatTableOfContent.findIndex(elem => elem.path === currentPage)
-	return flatTableOfContent[index - 1]?.path || ''
+	const navItem = flatTableOfContent[index]
+	return navItem
+}
+
+interface NavState {
+	prevItem: FlatNavItem
+	nextItem: FlatNavItem
+	index: number
 }
 
 const Footer = () => {
 	const { flatTableOfContent } = useContext(NavigationContext)
 	const { pathname: currentPage } = useLocation()
 	const router = useIonRouter()
+	const [navState, setNavState] = useState<NavState>()
+
+	const pages = flatTableOfContent.filter(elem => elem.type !== 'folder')
+
+	useEffect(() => {
+		const index = getCurrentPageIndex(pages, currentPage)
+		const prevItem = getItemByIndex(pages, index - 1)
+		const nextItem = getItemByIndex(pages, index + 1)
+		setNavState({ prevItem, nextItem, index })
+	}, [currentPage])
 
 	const goNext = () => {
-		const path = getNextPagePath(flatTableOfContent, currentPage)
-		router.push(`/page/${path}`)
+		if (navState) {
+			router.push(navState.nextItem.path)
+		}
 	}
 
 	const goPrev = () => {
-		const path = getPrevPagePath(flatTableOfContent, currentPage)
-		router.push(`/page/${path}`)
+		if (navState) {
+			router.push(navState.prevItem.path)
+		}
 	}
 
 	return (
 		<IonFooter>
 			<IonToolbar>
-				<IonButtons slot='start'>
-					<IonButton onClick={goPrev}>
-						<IonIcon size='large' color='primary' icon={PreviousChapterIcon} />
-					</IonButton>
-				</IonButtons>
+				{navState?.prevItem && (
+					<IonButtons slot='start'>
+						<IonButton onClick={goPrev}>
+							<IonIcon
+								size='large'
+								color='primary'
+								icon={PreviousChapterIcon}
+							/>
+						</IonButton>
+					</IonButtons>
+				)}
 				<IonButtons className={styles.menuButtonContainer}>
 					<IonMenuButton color='primary' />
 				</IonButtons>
-				<IonButtons slot='end'>
-					<IonButton onClick={goNext}>
-						<IonIcon size='large' color='primary' icon={NextChapterIcon} />
-					</IonButton>
-				</IonButtons>
+				{navState?.nextItem && (
+					<IonButtons slot='end'>
+						<IonButton onClick={goNext}>
+							<IonIcon size='large' color='primary' icon={NextChapterIcon} />
+						</IonButton>
+					</IonButtons>
+				)}
 			</IonToolbar>
 		</IonFooter>
 	)
