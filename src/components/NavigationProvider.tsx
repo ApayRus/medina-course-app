@@ -18,16 +18,12 @@ interface NavigationContextType {
 	tableOfContent: TableOfContentType
 	flatTableOfContent: Array<FlatNavItem>
 	loaded: boolean
-	currentPage: string
-	setCurrentPage: (path: string) => void
 }
 
 const defaultContextValue = {
 	tableOfContent: [],
 	flatTableOfContent: [],
-	loaded: false,
-	currentPage: '',
-	setCurrentPage: (path: string) => {}
+	loaded: false
 }
 
 export const NavigationContext =
@@ -56,10 +52,6 @@ const NavigationProvider: React.FC<Props> = ({ children }) => {
 	const [navigationContext, setNavigationContext] =
 		useState<NavigationContextType>(defaultContextValue)
 
-	const setCurrentPage = (path: string) => {
-		setNavigationContext(oldState => ({ ...oldState, currentPage: path }))
-	}
-
 	useEffect(() => {
 		const readServerData = async () => {
 			const bucketTOC = await getBucketFiles('audios', [])
@@ -77,9 +69,7 @@ const NavigationProvider: React.FC<Props> = ({ children }) => {
 			setNavigationContext({
 				tableOfContent,
 				flatTableOfContent,
-				loaded: true,
-				currentPage: '',
-				setCurrentPage
+				loaded: true
 			})
 		}
 		readServerData()

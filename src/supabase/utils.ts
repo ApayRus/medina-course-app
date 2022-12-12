@@ -17,11 +17,13 @@ export const getBucketFiles = async (
 	const foldersRaw = folderContent.filter(elem => !elem.id) // supabase returns folders w\o id, only with name
 	const filesRaw = folderContent.filter(elem => elem.id)
 
-	const files: Page[] = filesRaw.map(elem => ({
-		type: 'file',
-		path: elem.name,
-		title: elem.name
-	}))
+	const files: Page[] = filesRaw.map(elem => {
+		return {
+			type: 'file',
+			path: elem.name,
+			title: elem.name
+		}
+	})
 
 	const folders: Folder[] = await Promise.all(
 		foldersRaw.map(async elem => {

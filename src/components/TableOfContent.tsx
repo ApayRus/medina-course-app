@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useContext } from 'react'
+import React, { useRef, useEffect } from 'react'
 
 import {
 	IonIcon,
@@ -11,7 +11,7 @@ import {
 
 import * as icons from 'ionicons/icons'
 
-import { NavigationContext } from './NavigationProvider'
+import { useLocation } from 'react-router-dom'
 
 export type NavItemType = 'folder' | 'page' | 'file'
 
@@ -66,6 +66,7 @@ const TableOfContentComponent: React.FC<TableOfContentProps> = ({
 	openedFolders
 }) => {
 	const accordionGroup = useRef<null | HTMLIonAccordionGroupElement>(null)
+
 	useEffect(() => {
 		if (!accordionGroup.current) {
 			return
@@ -73,17 +74,19 @@ const TableOfContentComponent: React.FC<TableOfContentProps> = ({
 		accordionGroup.current.value = openedFolders // opened accordions
 	}, [])
 
-	const { currentPage } = useContext(NavigationContext)
+	const { pathname: currentPage } = useLocation()
 
 	return (
 		<IonAccordionGroup ref={accordionGroup} multiple={true}>
 			{content.map(item => {
 				const { title, path: itemPath, type } = item
 				const path = [...parents, itemPath].join('/')
-				const isActive = path === currentPage
+
 				if (type === 'file' || type === 'page') {
-					const basePath = type === 'file' ? '/page' : ''
+					const basePath = type === 'file' ? '/media' : ''
 					const pagePath = `${basePath}/${path}`
+
+					const isActive = pagePath === currentPage
 
 					return (
 						<IonMenuToggle key={path} autoHide={false}>

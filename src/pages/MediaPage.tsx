@@ -5,20 +5,17 @@ import {
 	IonTitle,
 	IonToolbar
 } from '@ionic/react'
-import { useState, useEffect, useContext } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams } from 'react-router'
 import Player from '../components/Player'
 import supabase from '../supabase/client'
 import Footer from '../components/PageFooter'
-import styles from './Page.module.css'
-import { NavigationContext } from '../components/NavigationProvider'
+import styles from './MediaPage.module.css'
 
-const Page: React.FC = () => {
+const MediaPage: React.FC = () => {
 	const { path } = useParams<{ path: string }>()
 
 	const [mediaLink, setMediaLink] = useState('')
-
-	const { setCurrentPage } = useContext(NavigationContext)
 
 	useEffect(() => {
 		const {
@@ -26,8 +23,7 @@ const Page: React.FC = () => {
 		} = supabase.storage.from('audios').getPublicUrl(path)
 
 		setMediaLink(publicUrl)
-		setCurrentPage(path)
-	}, [path, setCurrentPage])
+	}, [path])
 
 	return (
 		<IonPage>
@@ -46,4 +42,4 @@ const Page: React.FC = () => {
 	)
 }
 
-export default Page
+export default MediaPage

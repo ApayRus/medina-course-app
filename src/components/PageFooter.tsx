@@ -13,7 +13,8 @@ import {
 } from 'ionicons/icons'
 import { useContext } from 'react'
 import { FlatTableOfContentType, NavigationContext } from './NavigationProvider'
-import styles from '../pages/Page.module.css'
+import styles from './PageFooter.module.css'
+import { useLocation } from 'react-router'
 
 const getNextPagePath = (
 	flatTableOfContent: FlatTableOfContentType,
@@ -32,7 +33,8 @@ const getPrevPagePath = (
 }
 
 const Footer = () => {
-	const { flatTableOfContent, currentPage } = useContext(NavigationContext)
+	const { flatTableOfContent } = useContext(NavigationContext)
+	const { pathname: currentPage } = useLocation()
 	const router = useIonRouter()
 
 	const goNext = () => {
