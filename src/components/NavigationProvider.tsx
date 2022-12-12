@@ -1,22 +1,22 @@
 import React, { createContext, useState, useEffect } from 'react'
 import { getBucketFiles } from '../supabase/utils'
-import { Folder, File, TableOfContentType } from './TableOfContent'
+import { Folder, NavItemType, Page, TableOfContentType } from './TableOfContent'
 
 interface Props {
 	children: JSX.Element | JSX.Element[]
 }
 
-export interface NavElementType {
-	type: 'folder' | 'file'
-	name: string
+export interface FlatNavItem {
+	type: NavItemType
+	title: string
 	path: string
 }
 
-export type FlatTableOfContentType = NavElementType[]
+export type FlatTableOfContentType = FlatNavItem[]
 
 interface NavigationContextType {
 	tableOfContent: TableOfContentType
-	flatTableOfContent: Array<NavElementType>
+	flatTableOfContent: Array<FlatNavItem>
 	loaded: boolean
 	currentPage: string
 	setCurrentPage: (path: string) => void
@@ -36,17 +36,17 @@ export const NavigationContext =
 const getFlatTableOfContent = (
 	tableOfContent: TableOfContentType,
 	parents: string[]
-): NavElementType[] => {
+): FlatNavItem[] => {
 	return tableOfContent
-		.map((item: Folder | File) => {
-			const { type, name } = item
+		.map((item: Folder | Page) => {
+			const { type, title, path } = item
 			if (type === 'folder') {
 				return [
-					{ type, name, path: [...parents, name].join('/') },
-					...getFlatTableOfContent(item.content, [...parents, name])
+					{ type, title, path: [...parents, path].join('/') },
+					...getFlatTableOfContent(item.content, [...parents, path])
 				]
 			} else {
-				return { ...item, path: [...parents, name].join('/') }
+				return { ...item, path: [...parents, path].join('/') }
 			}
 		})
 		.flat()
@@ -62,7 +62,17 @@ const NavigationProvider: React.FC<Props> = ({ children }) => {
 
 	useEffect(() => {
 		const readServerData = async () => {
-			const tableOfContent = await getBucketFiles('audios', [])
+			const bucketTOC = await getBucketFiles('audios', [])
+			const localTOC: TableOfContentType = [
+				{ type: 'page', title: 'home', path: '', icon: 'homeOutline' },
+				{
+					type: 'page',
+					title: 'about',
+					path: 'about',
+					icon: 'informationCircleOutline'
+				}
+			]
+			const tableOfContent = [...localTOC, ...bucketTOC]
 			const flatTableOfContent = getFlatTableOfContent(tableOfContent, [])
 			setNavigationContext({
 				tableOfContent,

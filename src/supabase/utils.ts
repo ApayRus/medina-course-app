@@ -1,5 +1,5 @@
 // import { TableOfContent, File, Folder } from '../components/TableOfContent'
-import { TableOfContentType } from '../components/TableOfContent'
+import { Folder, Page, TableOfContentType } from '../components/TableOfContent'
 import supabase from './client'
 
 export const getBucketFiles = async (
@@ -17,15 +17,20 @@ export const getBucketFiles = async (
 	const foldersRaw = folderContent.filter(elem => !elem.id) // supabase returns folders w\o id, only with name
 	const filesRaw = folderContent.filter(elem => elem.id)
 
-	const files = filesRaw.map(elem => ({ name: elem.name, type: 'file' }))
+	const files: Page[] = filesRaw.map(elem => ({
+		type: 'file',
+		path: elem.name,
+		title: elem.name
+	}))
 
-	const folders: any = await Promise.all(
+	const folders: Folder[] = await Promise.all(
 		foldersRaw.map(async elem => {
 			const { name } = elem
 			const content = await getBucketFiles(bucketName, [...dirs, name])
 			return {
-				name,
 				type: 'folder',
+				title: name,
+				path: name,
 				content
 			}
 		})

@@ -23,7 +23,11 @@ const Menu: React.FC = () => {
 		<IonMenu contentId='main' type='overlay'>
 			<IonLoading isOpen={isLoading} />
 			<IonContent>
-				<TableOfContent content={tableOfContent} parents={[]} />
+				<TableOfContent
+					content={tableOfContent}
+					parents={[]}
+					openedFolders={['book1']}
+				/>
 			</IonContent>
 		</IonMenu>
 	)
