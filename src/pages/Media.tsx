@@ -10,7 +10,7 @@ import { useParams } from 'react-router'
 import Player from '../components/Player'
 import supabase from '../supabase/client'
 import Footer from '../components/PageFooter'
-import styles from './MediaPage.module.css'
+import styles from './Media.module.css'
 
 const MediaPage: React.FC = () => {
 	const { path } = useParams<{ path: string }>()
