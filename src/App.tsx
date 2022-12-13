@@ -7,7 +7,7 @@ import {
 import { IonReactRouter } from '@ionic/react-router'
 import { Route } from 'react-router-dom'
 import Menu from './components/Menu'
-import MediaPage from './pages/MediaPage'
+import MediaPage from './pages/Media'
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css'
@@ -30,6 +30,7 @@ import './theme/variables.css'
 
 import NavigationProvider from './components/NavigationProvider'
 import MainPage from './pages/Main'
+import AboutPage from './pages/About'
 
 setupIonicReact()
 
@@ -43,6 +44,9 @@ const App: React.FC = () => {
 						<IonRouterOutlet id='main'>
 							<Route path='/' exact={true}>
 								<MainPage />
+							</Route>
+							<Route path='/about' exact={true}>
+								<AboutPage />
 							</Route>
 							<Route path='/media/:path+'>
 								<MediaPage />
