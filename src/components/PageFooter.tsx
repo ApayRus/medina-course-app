@@ -55,7 +55,7 @@ const Footer = () => {
 		const prevItem = getItemByIndex(pages, index - 1)
 		const nextItem = getItemByIndex(pages, index + 1)
 		setNavState({ prevItem, nextItem, index })
-	}, [currentPage])
+	}, [currentPage, flatTableOfContent])
 
 	const goNext = () => {
 		if (navState) {
