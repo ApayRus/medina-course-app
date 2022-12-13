@@ -12,6 +12,7 @@ import {
 import * as icons from 'ionicons/icons'
 
 import { useLocation } from 'react-router-dom'
+import { getTitle } from '../utils/utils'
 
 export type NavItemType = 'folder' | 'page' | 'file'
 
@@ -85,7 +86,7 @@ const TableOfContentComponent: React.FC<TableOfContentProps> = ({
 				if (type === 'file' || type === 'page') {
 					const basePath = type === 'file' ? '/media' : ''
 					const pagePath = `${basePath}/${path}`
-
+					const goodTitle = type === 'file' ? getTitle(title) : title
 					const isActive = pagePath === currentPage
 
 					return (
@@ -99,7 +100,7 @@ const TableOfContentComponent: React.FC<TableOfContentProps> = ({
 									md={getIcon(item)}
 									style={{ color: isActive ? 'white' : '' }}
 								/>
-								<IonLabel>{title}</IonLabel>
+								<IonLabel>{goodTitle}</IonLabel>
 							</IonItem>
 						</IonMenuToggle>
 					)

@@ -11,6 +11,7 @@ import Player from '../components/Player'
 import supabase from '../supabase/client'
 import Footer from '../components/PageFooter'
 import styles from './Media.module.css'
+import { getTitle } from '../utils/utils'
 
 const MediaPage: React.FC = () => {
 	const { path } = useParams<{ path: string }>()
@@ -29,7 +30,7 @@ const MediaPage: React.FC = () => {
 		<IonPage>
 			<IonHeader>
 				<IonToolbar>
-					<IonTitle>{path}</IonTitle>
+					<IonTitle>{getTitle(path)}</IonTitle>
 				</IonToolbar>
 			</IonHeader>
 			<IonContent fullscreen>
