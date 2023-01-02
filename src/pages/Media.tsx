@@ -14,7 +14,7 @@ import styles from './Media.module.css'
 import { getTitle } from '../utils/utils'
 
 const MediaPage: React.FC = () => {
-	const { path } = useParams<{ path: string }>()
+	const { path = '' } = useParams<{ path: string }>()
 
 	const [mediaLink, setMediaLink] = useState('')
 

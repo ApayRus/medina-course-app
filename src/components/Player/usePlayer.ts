@@ -1,4 +1,5 @@
-import { useState, useEffect, RefObject } from 'react'
+import { useState, useEffect, RefObject, useContext } from 'react'
+import { AppStateContext } from '../AppStateProvider'
 
 interface PlayerState {
 	currentTime: number
@@ -18,20 +19,29 @@ const playerInitialState = {
 	isSeeking: false
 }
 
-const usePlayer = (mediaRef: RefObject<HTMLMediaElement>) => {
+const usePlayer = (
+	mediaRef: RefObject<HTMLMediaElement>,
+	mediaLink: string
+) => {
 	const [playerState, setPlayerState] =
 		useState<PlayerState>(playerInitialState)
 
+	const {
+		methods: { update: updateAppState }
+	} = useContext(AppStateContext)
+
 	useEffect(() => {
+		updateAppState({ loading: true })
 		if (mediaRef.current) {
 			mediaRef.current.onloadedmetadata = () => {
+				updateAppState({ loading: false })
 				setPlayerState(oldState => {
 					const { duration } = mediaRef.current!
 					return { ...playerInitialState, duration }
 				})
 			}
 		}
-	}, [mediaRef])
+	}, [mediaRef, mediaLink])
 
 	const onTimeUpdate = () => {
 		setPlayerState(oldState => {

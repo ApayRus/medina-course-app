@@ -29,7 +29,7 @@ const Player = ({ mediaLink }: Props) => {
 		onRangeChange,
 		plus5,
 		minus5
-	} = usePlayer(mediaRef)
+	} = usePlayer(mediaRef, mediaLink)
 
 	return (
 		<div className={styles.playerContainer}>

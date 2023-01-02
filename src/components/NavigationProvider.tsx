@@ -1,5 +1,6 @@
-import React, { createContext, useState, useEffect } from 'react'
+import React, { createContext, useState, useEffect, useContext } from 'react'
 import { getBucketFiles } from '../supabase/utils'
+import { AppStateContext } from './AppStateProvider'
 import { Folder, NavItemType, Page, TableOfContentType } from './TableOfContent'
 
 interface Props {
@@ -51,6 +52,10 @@ const getFlatTableOfContent = (
 }
 
 const NavigationProvider: React.FC<Props> = ({ children }) => {
+	const {
+		methods: { update: updateAppState }
+	} = useContext(AppStateContext)
+
 	const [navigationContext, setNavigationContext] =
 		useState<NavigationContextType>(defaultContextValue)
 
@@ -78,6 +83,10 @@ const NavigationProvider: React.FC<Props> = ({ children }) => {
 
 		return () => {}
 	}, [])
+
+	useEffect(() => {
+		updateAppState({ loading: !navigationContext.loaded })
+	}, [navigationContext.loaded])
 
 	return (
 		<NavigationContext.Provider value={navigationContext}>

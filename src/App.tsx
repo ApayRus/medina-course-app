@@ -31,31 +31,34 @@ import './theme/variables.css'
 import NavigationProvider from './components/NavigationProvider'
 import MainPage from './pages/Main'
 import AboutPage from './pages/About'
+import AppStateProvider from './components/AppStateProvider'
 
 setupIonicReact()
 
 const App: React.FC = () => {
 	return (
-		<NavigationProvider>
-			<IonApp>
-				<IonReactRouter>
-					<IonSplitPane contentId='main'>
-						<Menu />
-						<IonRouterOutlet id='main'>
-							<Route path='/' exact={true}>
-								<MainPage />
-							</Route>
-							<Route path='/about' exact={true}>
-								<AboutPage />
-							</Route>
-							<Route path='/media/:path+'>
-								<MediaPage />
-							</Route>
-						</IonRouterOutlet>
-					</IonSplitPane>
-				</IonReactRouter>
-			</IonApp>
-		</NavigationProvider>
+		<AppStateProvider>
+			<NavigationProvider>
+				<IonApp>
+					<IonReactRouter>
+						<IonSplitPane contentId='main'>
+							<Menu />
+							<IonRouterOutlet id='main'>
+								<Route path='/' exact={true}>
+									<MainPage />
+								</Route>
+								<Route path='/about' exact={true}>
+									<AboutPage />
+								</Route>
+								<Route path='/media/:path+'>
+									<MediaPage />
+								</Route>
+							</IonRouterOutlet>
+						</IonSplitPane>
+					</IonReactRouter>
+				</IonApp>
+			</NavigationProvider>
+		</AppStateProvider>
 	)
 }
 
