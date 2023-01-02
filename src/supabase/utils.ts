@@ -10,7 +10,7 @@ export const getBucketFiles = async (
 
 	const { data: folderContent } = await supabase.storage
 		.from(bucketName)
-		.list(path, { sortBy: { column: 'name', order: 'asc' } })
+		.list(path, { sortBy: { column: 'name', order: 'asc' }, limit: 1000 })
 
 	if (!folderContent) return []
 
