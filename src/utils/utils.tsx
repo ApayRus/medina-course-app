@@ -1,5 +1,5 @@
-export const getTitle = (string: string) => {
+export const getTitle = (string = '') => {
 	const match = string.match(/\d{3}/) || []
 	const [num] = match
-	return `Страница ${+num}`
+	return `Страница ${num}`
 }
