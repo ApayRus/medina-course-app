@@ -1,22 +1,25 @@
 import {
 	IonContent,
-	IonHeader,
+	IonFooter,
 	IonPage,
-	IonTitle,
+	IonText,
 	IonToolbar
 } from '@ionic/react'
-import { useState, useEffect } from 'react'
+import { useEffect, useContext } from 'react'
 import { useParams } from 'react-router'
-import Player from '../components/Player'
 import supabase from '../supabase/client'
-import Footer from '../components/PageFooter'
-import styles from './Media.module.css'
 import { getTitle } from '../utils/utils'
+import { PlayerContext } from '../components/Player/Provider'
+import Header from './Header'
+import Player from '../components/Player'
 
 const MediaPage: React.FC = () => {
 	const { path = '' } = useParams<{ path: string }>()
 
-	const [mediaLink, setMediaLink] = useState('')
+	const {
+		state: playerState,
+		methods: { setMediaLink }
+	} = useContext(PlayerContext)
 
 	useEffect(() => {
 		const {
@@ -28,17 +31,22 @@ const MediaPage: React.FC = () => {
 
 	return (
 		<IonPage>
-			<IonHeader>
-				<IonToolbar>
-					<IonTitle>{getTitle(path)}</IonTitle>
-				</IonToolbar>
-			</IonHeader>
+			<Header title={getTitle(path)} />
 			<IonContent fullscreen>
-				<div className={styles.container}>
-					<Player mediaLink={mediaLink} />
-				</div>
+				<pre>{JSON.stringify(playerState, null, 2)}</pre>
+				<IonText>
+					Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque beatae
+					nisi quisquam maxime molestias voluptatum perferendis, dolores qui
+					consequuntur sed, numquam, temporibus similique. At, ipsam nemo
+					delectus ipsa, magni possimus, hic eveniet laboriosam natus aliquid
+					autem.
+				</IonText>
 			</IonContent>
-			<Footer />
+			<IonFooter>
+				<IonToolbar>
+					<Player />
+				</IonToolbar>
+			</IonFooter>
 		</IonPage>
 	)
 }

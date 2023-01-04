@@ -32,6 +32,7 @@ import NavigationProvider from './components/NavigationProvider'
 import MainPage from './pages/Main'
 import AboutPage from './pages/About'
 import AppStateProvider from './components/AppStateProvider'
+import PlayerProvider from './components/Player/Provider'
 
 setupIonicReact()
 
@@ -51,7 +52,9 @@ const App: React.FC = () => {
 									<AboutPage />
 								</Route>
 								<Route path='/media/:path+'>
-									<MediaPage />
+									<PlayerProvider>
+										<MediaPage />
+									</PlayerProvider>
 								</Route>
 							</IonRouterOutlet>
 						</IonSplitPane>
