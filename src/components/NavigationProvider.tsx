@@ -15,10 +15,15 @@ export interface FlatNavItem {
 
 export type FlatTableOfContentType = FlatNavItem[]
 
-interface NavigationContextType {
+interface State {
 	tableOfContent: TableOfContentType
 	flatTableOfContent: Array<FlatNavItem>
 	loaded: boolean
+}
+
+interface ContextType {
+	state: State
+	// methods: Methods
 }
 
 const defaultContextValue = {
@@ -27,8 +32,9 @@ const defaultContextValue = {
 	loaded: false
 }
 
-export const NavigationContext =
-	createContext<NavigationContextType>(defaultContextValue)
+export const NavigationContext = createContext<ContextType>({
+	state: defaultContextValue
+})
 
 const getFlatTableOfContent = (
 	tableOfContent: TableOfContentType,
@@ -56,8 +62,7 @@ const NavigationProvider: React.FC<Props> = ({ children }) => {
 		methods: { update: updateAppState }
 	} = useContext(AppStateContext)
 
-	const [navigationContext, setNavigationContext] =
-		useState<NavigationContextType>(defaultContextValue)
+	const [state, setState] = useState<State>(defaultContextValue)
 
 	useEffect(() => {
 		const readServerData = async () => {
@@ -73,11 +78,12 @@ const NavigationProvider: React.FC<Props> = ({ children }) => {
 			]
 			const tableOfContent = [...localTOC, ...bucketTOC]
 			const flatTableOfContent = getFlatTableOfContent(tableOfContent, [])
-			setNavigationContext({
+			setState(oldState => ({
+				...oldState,
 				tableOfContent,
 				flatTableOfContent,
 				loaded: true
-			})
+			}))
 		}
 		readServerData()
 
@@ -85,13 +91,14 @@ const NavigationProvider: React.FC<Props> = ({ children }) => {
 	}, [])
 
 	useEffect(() => {
-		updateAppState({ loading: !navigationContext.loaded })
-	}, [navigationContext.loaded])
+		updateAppState({ loading: !state.loaded })
+	}, [state.loaded])
 
 	return (
-		<NavigationContext.Provider value={navigationContext}>
+		<NavigationContext.Provider value={{ state /* , methods */ }}>
 			{children}
 		</NavigationContext.Provider>
 	)
 }
+
 export default NavigationProvider

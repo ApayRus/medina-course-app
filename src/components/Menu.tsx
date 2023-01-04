@@ -8,7 +8,9 @@ import TableOfContent from './TableOfContent'
 import { NavigationContext } from './NavigationProvider'
 
 const Menu: React.FC = () => {
-	const { tableOfContent } = useContext(NavigationContext)
+	const {
+		state: { tableOfContent }
+	} = useContext(NavigationContext)
 
 	return (
 		<IonMenu contentId='main' type='overlay'>
