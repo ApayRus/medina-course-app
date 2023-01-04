@@ -1,15 +1,11 @@
-import { IonContent, IonHeader, IonImg, IonPage, IonText } from '@ionic/react'
-import Footer from '../components/PageFooter'
+import { IonContent, IonImg, IonPage, IonText } from '@ionic/react'
+import Header from './Header'
 import styles from './Main.module.css'
 
 const MainPage: React.FC = () => {
 	return (
 		<IonPage>
-			<IonHeader>
-				{/* <IonToolbar>
-					<IonTitle>Book</IonTitle>
-				</IonToolbar> */}
-			</IonHeader>
+			<Header />
 			<IonContent fullscreen>
 				<div className={styles.container}>
 					<IonText color='primary'>
@@ -24,7 +20,6 @@ const MainPage: React.FC = () => {
 					</IonText>
 				</div>
 			</IonContent>
-			<Footer />
 		</IonPage>
 	)
 }
