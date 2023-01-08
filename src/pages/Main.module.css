@@ -1,7 +1,25 @@
+@font-face {
+	font-family: 'Scheherazade';
+	src: url('../../public/assets/fonts/ScheherazadeNew-Regular.ttf');
+}
+
 .container {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
 	height: 100%;
+}
+
+.h1,
+.h2 {
+	font-family: Scheherazade;
+}
+
+.h1 {
+	font-size: 3rem;
+}
+
+.h2 {
+	font-size: 2rem;
 }
