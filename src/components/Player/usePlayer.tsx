@@ -9,7 +9,8 @@ const playerInitialState: State = {
 	currentTimePercentage: 0,
 	isPlaying: false,
 	isSeeking: false,
-	mediaLink: ''
+	mediaLink: '',
+	playMode: 'all'
 }
 
 const usePlayer = (mediaRef: RefObject<HTMLMediaElement>) => {
@@ -89,12 +90,17 @@ const usePlayer = (mediaRef: RefObject<HTMLMediaElement>) => {
 		setState(oldState => ({ ...oldState, mediaLink }))
 	}
 
+	const setPlayMode = (playMode: 'phrase' | 'all') => {
+		setState(oldState => ({ ...oldState, playMode }))
+	}
+
 	const methods: Methods = {
 		play,
 		pause,
 		plus5,
 		minus5,
 		setMediaLink,
+		setPlayMode,
 		onRangeChange,
 		onIonKnobMoveStart,
 		onIonKnobMoveEnd
@@ -106,7 +112,7 @@ const usePlayer = (mediaRef: RefObject<HTMLMediaElement>) => {
 		onTimeUpdate
 	}
 
-	return { state, methods, eventHandlers }
+	return { state, mediaRef, methods, eventHandlers }
 }
 
 export default usePlayer

@@ -1,4 +1,4 @@
-import { createContext, useRef } from 'react'
+import { createContext, RefObject, useRef } from 'react'
 import usePlayer from './usePlayer'
 
 export interface State {
@@ -9,6 +9,7 @@ export interface State {
 	isPlaying: boolean
 	isSeeking: boolean
 	mediaLink: string
+	playMode: 'phrase' | 'all'
 }
 
 // type IonRangeEvent = { detail: { value: number } }
@@ -19,6 +20,7 @@ export interface Methods {
 	plus5: () => void
 	minus5: () => void
 	setMediaLink: (mediaLink: string) => void
+	setPlayMode: (playMode: 'phrase' | 'all') => void
 	onRangeChange: (props: any) => void
 	onIonKnobMoveStart: (props: any) => void
 	onIonKnobMoveEnd: (props: any) => void
@@ -33,6 +35,7 @@ export interface EventHandlers {
 interface ContextType {
 	state: State
 	methods: Methods
+	mediaRef: RefObject<HTMLMediaElement>
 }
 
 interface Props {
@@ -52,7 +55,7 @@ const PlayerProvider: React.FC<Props> = ({ children }) => {
 		eventHandlers: { onPlay, onPause, onTimeUpdate }
 	} = usePlayer(mediaRef)
 
-	const contextValue = { state, methods }
+	const contextValue = { state, methods, mediaRef }
 
 	return (
 		<PlayerContext.Provider value={contextValue}>
