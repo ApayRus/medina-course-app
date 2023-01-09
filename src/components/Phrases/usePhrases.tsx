@@ -13,6 +13,7 @@ const usePhrases = () => {
 	const [state, setState] = useState<State>(defaultState)
 
 	const phraseRefs = useRef<HTMLDivElement[]>([])
+	const phrasesContainerRef = useRef<HTMLIonContentElement>(null)
 
 	const {
 		state: { currentTime, playMode },
@@ -20,9 +21,10 @@ const usePhrases = () => {
 		mediaRef
 	} = useContext(PlayerContext)
 
+	const { phrases, currentPhraseNum } = state
+
 	useEffect(() => {
 		if (playMode === 'phrase') {
-			const { phrases, currentPhraseNum } = state
 			const currentPhrase = phrases[currentPhraseNum]
 			const { end } = currentPhrase
 			if (currentTime >= end && mediaRef.current) {
@@ -30,10 +32,11 @@ const usePhrases = () => {
 				mediaRef.current.currentTime = end
 				setPlayMode('all')
 			}
-		} else {
+		} else if (playMode === 'all') {
 			const { phrases } = state
 			const currentPhraseNum = findCurrentPhraseNum(phrases, currentTime)
 			setState(oldState => ({ ...oldState, currentPhraseNum }))
+			scrollPhrasesBlock(currentPhraseNum, -250)
 		}
 	}, [currentTime, state.phrases])
 
@@ -61,9 +64,28 @@ const usePhrases = () => {
 		}
 	}
 
-	const methods: Methods = { setPhrases, setPhrasesTr, playPhrase }
+	const scrollPhrasesBlock = (currentPhraseNum: number, delta: number) => {
+		if (currentPhraseNum <= 0 || currentPhraseNum >= phrases.length) {
+			return
+		}
+		// const { height: videoHeight = 0 } =
+		// 	stickyPlayerContainerRef.current?.getBoundingClientRect() || {}
+		const currentPhraseY = phraseRefs.current[currentPhraseNum].offsetTop
+		phrasesContainerRef?.current?.scrollToPoint(
+			null,
+			currentPhraseY + delta, // - videoHeight
+			1000
+		)
+	}
 
-	return { state, phraseRefs, methods }
+	const methods: Methods = {
+		setPhrases,
+		setPhrasesTr,
+		playPhrase,
+		scrollPhrasesBlock
+	}
+
+	return { state, methods, phraseRefs, phrasesContainerRef }
 }
 
 export default usePhrases

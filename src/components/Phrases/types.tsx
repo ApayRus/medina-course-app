@@ -20,4 +20,5 @@ export interface Methods {
 	setPhrases: (phrases: Phrase[]) => void
 	setPhrasesTr: (phrasesTr: PhraseTr[]) => void
 	playPhrase: (phraseNum: number) => void
+	scrollPhrasesBlock: (currentPhraseNum: number, delta: number) => void
 }

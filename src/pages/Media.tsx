@@ -21,7 +21,8 @@ const MediaPage: React.FC = () => {
 	} = useContext(PlayerContext)
 
 	const {
-		methods: { setPhrases, setPhrasesTr }
+		methods: { setPhrases, setPhrasesTr },
+		phrasesContainerRef
 	} = useContext(PhrasesContext)
 
 	const {
@@ -74,7 +75,7 @@ const MediaPage: React.FC = () => {
 	return (
 		<IonPage>
 			<Header title={getTitle(path)} />
-			<IonContent fullscreen>
+			<IonContent fullscreen ref={phrasesContainerRef}>
 				<PhrasesBlock />
 			</IonContent>
 			<IonFooter>

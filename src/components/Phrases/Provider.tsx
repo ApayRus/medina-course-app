@@ -7,6 +7,7 @@ interface ContextType {
 	state: State
 	methods: Methods
 	phraseRefs: RefObject<HTMLDivElement[]>
+	phrasesContainerRef: RefObject<HTMLIonContentElement>
 }
 
 interface Props {
@@ -20,12 +21,8 @@ export const PhrasesContext = createContext<ContextType>(defaultContextValue)
 const PhrasesProvider: React.FC<Props> = ({ children }) => {
 	// const mediaRef = useRef<HTMLMediaElement>(null)
 
-	const { state, methods, phraseRefs } = usePhrases()
-
-	const contextValue = { state, methods, phraseRefs }
-
 	return (
-		<PhrasesContext.Provider value={contextValue}>
+		<PhrasesContext.Provider value={usePhrases()}>
 			<PhrasesBlock />
 			{children}
 		</PhrasesContext.Provider>
