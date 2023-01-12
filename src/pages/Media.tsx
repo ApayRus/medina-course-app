@@ -67,7 +67,7 @@ const MediaPage: React.FC = () => {
 
 	useEffect(() => {
 		setMediaLink(mediaLink)
-	}, [flatTableOfContent])
+	}, [flatTableOfContent, path])
 
 	return (
 		<IonPage>
