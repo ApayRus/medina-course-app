@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { TableOfContentType } from '../components/TableOfContent'
+import { TableOfContentType } from '../components/Navigation/types'
 
 export const getToc = async (trLang?: string) => {
 	const lang = trLang ? trLang : ''

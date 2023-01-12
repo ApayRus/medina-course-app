@@ -12,35 +12,7 @@ import {
 import * as icons from 'ionicons/icons'
 
 import { useLocation } from 'react-router-dom'
-
-export type NavItemType = 'folder' | 'html' | 'richMedia'
-
-type IconName =
-	| 'bookOutline'
-	| 'homeOutline'
-	| 'documentTextOutline'
-	| 'musicalNoteOutline'
-	| 'informationCircleOutline'
-
-export interface Page {
-	id: string
-	type: Exclude<NavItemType, 'folder'>
-	title: string
-	mediaLink?: string
-	icon?: IconName
-}
-
-type IconMap = {
-	[key in NavItemType]: IconName
-}
-
-export interface Folder {
-	id: string
-	type: 'folder'
-	title: string
-	icon?: IconName
-	content: Array<Page | Folder>
-}
+import { Folder, Page, IconMap, TableOfContentProps } from './types'
 
 const getIcon = (item: Folder | Page) => {
 	const { type, icon } = item
@@ -51,14 +23,6 @@ const getIcon = (item: Folder | Page) => {
 	}
 	const iconName = icon || iconMap[type]
 	return icons[iconName]
-}
-
-export type TableOfContentType = Array<Page | Folder> | []
-
-interface TableOfContentProps {
-	content: TableOfContentType
-	parents: string[]
-	openedFolders: string[]
 }
 
 const TableOfContentComponent: React.FC<TableOfContentProps> = ({

@@ -4,10 +4,11 @@ import {
 	chevronForward as NextChapterIcon
 } from 'ionicons/icons'
 import { useContext, useEffect, useState } from 'react'
-import { FlatNavItem, NavigationContext } from './NavigationProvider'
 import { useIonRouter } from '@ionic/react'
 import { useLocation } from 'react-router'
-import { getPageNeighbors } from '../utils/utils'
+import { getPageNeighbors } from '../../utils/utils'
+import { NavigationContext } from './NavigationProvider'
+import { FlatNavItem } from './types'
 
 interface State {
 	prevItem: FlatNavItem

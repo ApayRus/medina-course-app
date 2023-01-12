@@ -1,5 +1,5 @@
 import { IonToolbar, IonButtons, IonHeader, IonTitle } from '@ionic/react'
-import NavigationButtons from '../components/NavigationButtons'
+import NavigationButtons from '../components/Navigation/NavigationButtons'
 
 interface Props {
 	title?: string

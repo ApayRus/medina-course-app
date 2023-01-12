@@ -1,8 +1,6 @@
 import React, { useContext } from 'react'
 import { IonMenu, IonContent } from '@ionic/react'
 
-import './Menu.css'
-
 import TableOfContent from './TableOfContent'
 
 import { NavigationContext } from './NavigationProvider'

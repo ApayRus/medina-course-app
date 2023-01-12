@@ -9,7 +9,7 @@ import { PhrasesContext } from '../components/Phrases/Provider'
 import { parseSubs } from 'frazy-parser'
 import { Phrase, PhraseTr } from '../components/Phrases/types'
 import { AppStateContext } from '../components/AppStateProvider'
-import { NavigationContext } from '../components/NavigationProvider'
+import { NavigationContext } from '../components/Navigation/NavigationProvider'
 import { getSubs, getTranslation } from '../api'
 import { getNavItemInfo } from '../utils/utils'
 

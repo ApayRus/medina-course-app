@@ -1,26 +1,17 @@
 import React, { createContext, useState, useEffect, useContext } from 'react'
-import { getToc } from '../api'
-import { AppStateContext } from './AppStateProvider'
-import { Folder, NavItemType, Page, TableOfContentType } from './TableOfContent'
-
-interface Props {
-	children: JSX.Element | JSX.Element[]
-}
-
-export interface FlatNavItem {
-	id: string
-	type: NavItemType
-	title: string
-	path: string
-	mediaLink?: string
-}
-
-export type FlatTableOfContentType = FlatNavItem[]
+import { getToc } from '../../api'
+import { getFlatTableOfContent } from '../../utils/utils'
+import { AppStateContext } from '../AppStateProvider'
+import { TableOfContentType, FlatNavItem } from './types'
 
 interface State {
 	tableOfContent: TableOfContentType
 	flatTableOfContent: Array<FlatNavItem>
 	loaded: boolean
+}
+
+interface Props {
+	children: JSX.Element | JSX.Element[]
 }
 
 interface ContextType {
@@ -37,25 +28,6 @@ const defaultContextValue = {
 export const NavigationContext = createContext<ContextType>({
 	state: defaultContextValue
 })
-
-const getFlatTableOfContent = (
-	tableOfContent: TableOfContentType,
-	parents: string[]
-): FlatNavItem[] => {
-	return tableOfContent
-		.map((item: Folder | Page) => {
-			const { type, title, id } = item
-			if (type === 'folder') {
-				return [
-					{ id, type, title, path: '/' + [...parents, id].join('/') },
-					...getFlatTableOfContent(item.content, [...parents, id])
-				]
-			} else {
-				return { ...item, path: '/' + [...parents, id].join('/') }
-			}
-		})
-		.flat()
-}
 
 const NavigationProvider: React.FC<Props> = ({ children }) => {
 	const {

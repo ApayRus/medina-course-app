@@ -1,4 +1,10 @@
-import { FlatTableOfContentType } from '../components/NavigationProvider'
+import {
+	FlatNavItem,
+	FlatTableOfContentType,
+	Folder,
+	Page,
+	TableOfContentType
+} from '../components/Navigation/types'
 
 const getCurrentPageIndex = (
 	flatTableOfContent: FlatTableOfContentType,
@@ -34,4 +40,23 @@ export const getNavItemInfo = (
 ) => {
 	const item = flatToc.find(elem => `/${path}` === elem.path)
 	return item
+}
+
+export const getFlatTableOfContent = (
+	tableOfContent: TableOfContentType,
+	parents: string[]
+): FlatNavItem[] => {
+	return tableOfContent
+		.map((item: Folder | Page) => {
+			const { type, title, id } = item
+			if (type === 'folder') {
+				return [
+					{ id, type, title, path: '/' + [...parents, id].join('/') },
+					...getFlatTableOfContent(item.content, [...parents, id])
+				]
+			} else {
+				return { ...item, path: '/' + [...parents, id].join('/') }
+			}
+		})
+		.flat()
 }
