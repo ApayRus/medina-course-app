@@ -17,15 +17,12 @@ export const getSubs = async (path: string) => {
 	return subs as string
 }
 
-export const getTranslation = async (
-	path: string,
-	translationLanguage: string
-) => {
+export const getTranslation = async (path: string, trLang: string) => {
 	const pathArray = path.split('/')
 	const [bookPath, ...rest] = pathArray
 	const pagePath = rest.join('/')
 	const { data: translation } = await axios(
-		`/content/${bookPath}/translations/${translationLanguage}/${pagePath}.txt`
+		`/content/${bookPath}/translations/${trLang}/${pagePath}.txt`
 	)
 	return translation as string
 }

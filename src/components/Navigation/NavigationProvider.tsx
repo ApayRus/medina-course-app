@@ -7,6 +7,7 @@ import { TableOfContentType, FlatNavItem } from './types'
 interface State {
 	tableOfContent: TableOfContentType
 	flatTableOfContent: Array<FlatNavItem>
+	flatTableOfContentTr: Array<FlatNavItem>
 	loaded: boolean
 }
 
@@ -22,6 +23,7 @@ interface ContextType {
 const defaultContextValue = {
 	tableOfContent: [],
 	flatTableOfContent: [],
+	flatTableOfContentTr: [],
 	loaded: false
 }
 
@@ -32,7 +34,7 @@ export const NavigationContext = createContext<ContextType>({
 const NavigationProvider: React.FC<Props> = ({ children }) => {
 	const {
 		methods: { update: updateAppState },
-		state: { translationLanguage }
+		state: { trLang }
 	} = useContext(AppStateContext)
 
 	const [state, setState] = useState<State>(defaultContextValue)
@@ -40,18 +42,21 @@ const NavigationProvider: React.FC<Props> = ({ children }) => {
 	useEffect(() => {
 		const readServerData = async () => {
 			const toc = await getToc()
+			const tocTr = await getToc(trLang)
 			// const [toc, tocTr] = await Promise.all([
 			// 	getToc(),
-			// 	getToc(translationLanguage)
+			// 	getToc(trLang)
 			// ])
 			console.log(toc)
 			// console.log(tocTr)
 			const tableOfContent = toc
 			const flatTableOfContent = getFlatTableOfContent(tableOfContent, [])
+			const flatTableOfContentTr = getFlatTableOfContent(tocTr, [])
 			setState(oldState => ({
 				...oldState,
 				tableOfContent,
 				flatTableOfContent,
+				flatTableOfContentTr,
 				loaded: true
 			}))
 		}

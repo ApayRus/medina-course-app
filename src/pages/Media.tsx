@@ -21,7 +21,7 @@ const MediaPage: React.FC = () => {
 	} = useContext(PlayerContext)
 
 	const {
-		state: { flatTableOfContent }
+		state: { flatTableOfContent, flatTableOfContentTr }
 	} = useContext(NavigationContext)
 
 	const {
@@ -30,16 +30,19 @@ const MediaPage: React.FC = () => {
 	} = useContext(PhrasesContext)
 
 	const {
-		state: { translationLanguage }
+		state: { trLang }
 	} = useContext(AppStateContext)
 
 	const navItemInfo = getNavItemInfo(flatTableOfContent, path)
+	const navItemInfoTr = getNavItemInfo(flatTableOfContentTr, path)
+
 	const { mediaLink = '', title = '' } = navItemInfo || {}
+	const { title: titleTr = '' } = navItemInfoTr || {}
 
 	useEffect(() => {
 		const loadAndParseSubs = async () => {
 			const subsText = await getSubs(path)
-			const translationText = await getTranslation(path, translationLanguage)
+			const translationText = await getTranslation(path, trLang)
 
 			const phrases: Phrase[] = subsText
 				? parseSubs(subsText, false).map(elem => ({
@@ -66,7 +69,7 @@ const MediaPage: React.FC = () => {
 
 	return (
 		<IonPage>
-			<Header title={title} />
+			<Header title={title} titleTr={titleTr} />
 			<IonContent fullscreen ref={phrasesContainerRef}>
 				<PhrasesBlock />
 			</IonContent>

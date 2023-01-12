@@ -3,7 +3,7 @@ import { createContext, useEffect, useState } from 'react'
 
 interface State {
 	loading: boolean
-	translationLanguage: string
+	trLang: string
 }
 
 interface Methods {
@@ -26,7 +26,7 @@ export const AppStateContext = createContext<ContextType>(defaultContextValue)
 const AppStateProvider: React.FC<Props> = ({ children }) => {
 	const [state, setState] = useState<State>({
 		loading: true,
-		translationLanguage: 'ru'
+		trLang: 'ru'
 	})
 	const [openLoadingOverlay, setOpenLoadingOverlay] = useState(false)
 

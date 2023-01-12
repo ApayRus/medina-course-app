@@ -2,7 +2,6 @@ import { useContext } from 'react'
 import { PhrasesContext } from './Provider'
 import { playOutline as playIcon } from 'ionicons/icons/'
 import { IonButton, IonIcon } from '@ionic/react'
-import './Phrases.css'
 
 const PhrasesBlock = () => {
 	const {
