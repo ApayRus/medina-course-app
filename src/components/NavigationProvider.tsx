@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from 'react'
-import { getBucketFiles } from '../supabase/utils'
+import { getToc } from '../api'
 import { AppStateContext } from './AppStateProvider'
 import { Folder, NavItemType, Page, TableOfContentType } from './TableOfContent'
 
@@ -8,9 +8,11 @@ interface Props {
 }
 
 export interface FlatNavItem {
+	id: string
 	type: NavItemType
 	title: string
 	path: string
+	mediaLink?: string
 }
 
 export type FlatTableOfContentType = FlatNavItem[]
@@ -42,16 +44,14 @@ const getFlatTableOfContent = (
 ): FlatNavItem[] => {
 	return tableOfContent
 		.map((item: Folder | Page) => {
-			const { type, title, path } = item
+			const { type, title, id } = item
 			if (type === 'folder') {
 				return [
-					{ type, title, path: '/' + [...parents, path].join('/') },
-					...getFlatTableOfContent(item.content, [...parents, path])
+					{ id, type, title, path: '/' + [...parents, id].join('/') },
+					...getFlatTableOfContent(item.content, [...parents, id])
 				]
-			} else if (type === 'file') {
-				return { ...item, path: '/media/' + [...parents, path].join('/') }
 			} else {
-				return { ...item, path: '/' + [...parents, path].join('/') }
+				return { ...item, path: '/' + [...parents, id].join('/') }
 			}
 		})
 		.flat()
@@ -59,24 +59,22 @@ const getFlatTableOfContent = (
 
 const NavigationProvider: React.FC<Props> = ({ children }) => {
 	const {
-		methods: { update: updateAppState }
+		methods: { update: updateAppState },
+		state: { translationLanguage }
 	} = useContext(AppStateContext)
 
 	const [state, setState] = useState<State>(defaultContextValue)
 
 	useEffect(() => {
 		const readServerData = async () => {
-			const bucketTOC = await getBucketFiles('audios', [])
-			const localTOC: TableOfContentType = [
-				{ type: 'page', title: 'home', path: '', icon: 'homeOutline' },
-				{
-					type: 'page',
-					title: 'about',
-					path: 'about',
-					icon: 'informationCircleOutline'
-				}
-			]
-			const tableOfContent = [...localTOC, ...bucketTOC]
+			const toc = await getToc()
+			// const [toc, tocTr] = await Promise.all([
+			// 	getToc(),
+			// 	getToc(translationLanguage)
+			// ])
+			console.log(toc)
+			// console.log(tocTr)
+			const tableOfContent = toc
 			const flatTableOfContent = getFlatTableOfContent(tableOfContent, [])
 			setState(oldState => ({
 				...oldState,

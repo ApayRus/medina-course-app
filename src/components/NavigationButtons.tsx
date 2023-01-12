@@ -7,7 +7,7 @@ import { useContext, useEffect, useState } from 'react'
 import { FlatNavItem, NavigationContext } from './NavigationProvider'
 import { useIonRouter } from '@ionic/react'
 import { useLocation } from 'react-router'
-import { getPageNeighbors } from '../supabase/utils'
+import { getPageNeighbors } from '../utils/utils'
 
 interface State {
 	prevItem: FlatNavItem

@@ -12,9 +12,8 @@ import {
 import * as icons from 'ionicons/icons'
 
 import { useLocation } from 'react-router-dom'
-import { getTitle } from '../utils/utils'
 
-export type NavItemType = 'folder' | 'page' | 'file'
+export type NavItemType = 'folder' | 'html' | 'richMedia'
 
 type IconName =
 	| 'bookOutline'
@@ -24,9 +23,10 @@ type IconName =
 	| 'informationCircleOutline'
 
 export interface Page {
+	id: string
 	type: Exclude<NavItemType, 'folder'>
 	title: string
-	path: string
+	mediaLink?: string
 	icon?: IconName
 }
 
@@ -35,9 +35,9 @@ type IconMap = {
 }
 
 export interface Folder {
+	id: string
 	type: 'folder'
 	title: string
-	path: string
 	icon?: IconName
 	content: Array<Page | Folder>
 }
@@ -46,8 +46,8 @@ const getIcon = (item: Folder | Page) => {
 	const { type, icon } = item
 	const iconMap: IconMap = {
 		folder: 'bookOutline',
-		file: 'musicalNoteOutline',
-		page: 'documentTextOutline'
+		richMedia: 'musicalNoteOutline',
+		html: 'documentTextOutline'
 	}
 	const iconName = icon || iconMap[type]
 	return icons[iconName]
@@ -80,19 +80,16 @@ const TableOfContentComponent: React.FC<TableOfContentProps> = ({
 	return (
 		<IonAccordionGroup ref={accordionGroup} multiple={true}>
 			{content.map(item => {
-				const { title, path: itemPath, type } = item
+				const { title, id: itemPath, type } = item
 				const path = [...parents, itemPath].join('/')
 
-				if (type === 'file' || type === 'page') {
-					const basePath = type === 'file' ? '/media' : ''
-					const pagePath = `${basePath}/${path}`
-					const goodTitle = type === 'file' ? getTitle(title) : title
-					const isActive = pagePath === currentPage
+				if (type !== 'folder') {
+					const isActive = `/${path}` === currentPage
 
 					return (
 						<IonMenuToggle key={path} autoHide={false}>
 							<IonItem
-								routerLink={pagePath}
+								routerLink={'/' + path}
 								color={isActive ? 'secondary' : ''}
 							>
 								<IonIcon
@@ -100,7 +97,7 @@ const TableOfContentComponent: React.FC<TableOfContentProps> = ({
 									md={getIcon(item)}
 									style={{ color: isActive ? 'white' : '' }}
 								/>
-								<IonLabel>{goodTitle}</IonLabel>
+								<IonLabel className='ion-text-wrap'>{title}</IonLabel>
 							</IonItem>
 						</IonMenuToggle>
 					)
@@ -111,7 +108,7 @@ const TableOfContentComponent: React.FC<TableOfContentProps> = ({
 						<IonAccordion key={path} value={path}>
 							<IonItem slot='header' color='light'>
 								<IonIcon slot='start' md={getIcon(item)} />
-								<IonLabel>{title}</IonLabel>
+								<IonLabel className='ion-text-wrap'>{title}</IonLabel>
 							</IonItem>
 							<div className='ion-padding' slot='content'>
 								<TableOfContentComponent

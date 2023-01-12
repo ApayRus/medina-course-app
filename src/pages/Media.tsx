@@ -1,17 +1,17 @@
 import { IonContent, IonFooter, IonPage, IonToolbar } from '@ionic/react'
 import { useEffect, useContext } from 'react'
 import { useParams } from 'react-router'
-import supabase from '../supabase/client'
-import { getTitle } from '../utils/utils'
 import { PlayerContext } from '../components/Player/Provider'
 import Header from './Header'
 import Player from '../components/Player'
 import PhrasesBlock from '../components/Phrases'
 import { PhrasesContext } from '../components/Phrases/Provider'
 import { parseSubs } from 'frazy-parser'
-import axios from 'axios'
 import { Phrase, PhraseTr } from '../components/Phrases/types'
 import { AppStateContext } from '../components/AppStateProvider'
+import { NavigationContext } from '../components/NavigationProvider'
+import { getSubs, getTranslation } from '../api'
+import { getNavItemInfo } from '../utils/utils'
 
 const MediaPage: React.FC = () => {
 	const { path = '' } = useParams<{ path: string }>()
@@ -19,6 +19,10 @@ const MediaPage: React.FC = () => {
 	const {
 		methods: { setMediaLink }
 	} = useContext(PlayerContext)
+
+	const {
+		state: { flatTableOfContent }
+	} = useContext(NavigationContext)
 
 	const {
 		methods: { setPhrases, setPhrasesTr },
@@ -29,26 +33,14 @@ const MediaPage: React.FC = () => {
 		state: { translationLanguage }
 	} = useContext(AppStateContext)
 
+	const navItemInfo = getNavItemInfo(flatTableOfContent, path)
+	const { mediaLink = '', title = '' } = navItemInfo || {}
+
 	useEffect(() => {
-		const {
-			data: { publicUrl: audioUrl }
-		} = supabase.storage.from('audios').getPublicUrl(path)
-
-		const textPath = path.replace(/mp3$/m, 'txt')
-
-		const {
-			data: { publicUrl: subsUrl }
-		} = supabase.storage.from('subs').getPublicUrl(textPath)
-
-		const {
-			data: { publicUrl: translationUrl }
-		} = supabase.storage
-			.from('translations')
-			.getPublicUrl(`${translationLanguage}/${textPath}`)
-
 		const loadAndParseSubs = async () => {
-			const subsText = await readFile(subsUrl)
-			const translationText = await readFile(translationUrl)
+			const subsText = await getSubs(path)
+			const translationText = await getTranslation(path, translationLanguage)
+
 			const phrases: Phrase[] = subsText
 				? parseSubs(subsText, false).map(elem => ({
 						...elem,
@@ -69,12 +61,12 @@ const MediaPage: React.FC = () => {
 
 		loadAndParseSubs()
 
-		setMediaLink(audioUrl)
+		setMediaLink(mediaLink)
 	}, [path])
 
 	return (
 		<IonPage>
-			<Header title={getTitle(path)} />
+			<Header title={title} />
 			<IonContent fullscreen ref={phrasesContainerRef}>
 				<PhrasesBlock />
 			</IonContent>
@@ -85,16 +77,6 @@ const MediaPage: React.FC = () => {
 			</IonFooter>
 		</IonPage>
 	)
-}
-
-async function readFile(fileUrl: string) {
-	try {
-		const { data } = await axios(fileUrl)
-		return data
-	} catch (e) {
-		// console.log(e)
-		return ''
-	}
 }
 
 export default MediaPage

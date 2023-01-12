@@ -46,13 +46,7 @@ const App: React.FC = () => {
 						<IonSplitPane contentId='main'>
 							<Menu />
 							<IonRouterOutlet id='main'>
-								<Route path='/' exact={true}>
-									<MainPage />
-								</Route>
-								<Route path='/about' exact={true}>
-									<AboutPage />
-								</Route>
-								<Route path='/media/:path+'>
+								<Route path='/:path+'>
 									<PlayerProvider>
 										<PhrasesProvider>
 											<MediaPage />
