@@ -63,9 +63,11 @@ const MediaPage: React.FC = () => {
 		}
 
 		loadAndParseSubs()
-
-		setMediaLink(mediaLink)
 	}, [path])
+
+	useEffect(() => {
+		setMediaLink(mediaLink)
+	}, [flatTableOfContent])
 
 	return (
 		<IonPage>
