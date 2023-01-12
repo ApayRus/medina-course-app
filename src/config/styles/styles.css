@@ -3,13 +3,42 @@
 	src: url('../../../public/assets/fonts/ScheherazadeNew-Regular.ttf');
 }
 
+/* NAVIGATION */
+
+.pageTitle {
+	font-family: Scheherazade;
+}
+
+.pageSubtitle {
+	font-size: small;
+	color: grey;
+}
+
+ion-label {
+	font-family: Scheherazade !important;
+	/* font-size: 1.3rem !important; */
+}
+
+.menuSubItem {
+	margin-top: 5px;
+	color: gray;
+	font-size: small;
+}
+
+.activeMenuItem .menuSubItem {
+	color: white;
+}
+
+/* PHRASES */
+
 .phrasesBlock {
 	/* max-width: 400px; */
 }
 
 .phraseBlock {
-	padding: 5px;
-	margin: 5px;
+	padding-inline: 5px;
+
+	margin-inline: 5px;
 	/* border: 1px solid rgba(255, 255, 255, 1); */
 	border-radius: 10px;
 }
@@ -17,6 +46,7 @@
 .phraseBlock .text {
 	font-family: 'Scheherazade';
 	font-size: 1.5rem;
+	direction: rtl;
 }
 
 .phraseBlock .phraseNum {
@@ -25,7 +55,7 @@
 	color: grey;
 	display: flex;
 	flex-direction: row;
-	justify-content: flex-end;
+	justify-content: flex-start;
 }
 
 /* .phraseWrapper:nth-child(1) {
@@ -48,6 +78,7 @@
 .phraseBlock .textTr {
 	color: grey;
 	font-size: 14px;
+	text-align: right;
 }
 .phraseBlock.active {
 	position: relative;
