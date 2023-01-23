@@ -1,6 +1,6 @@
 @font-face {
 	font-family: 'Scheherazade';
-	src: url('../../../public/assets/fonts/ScheherazadeNew-Regular.ttf');
+	src: url('/assets/fonts/ScheherazadeNew-Regular.ttf');
 }
 
 /* NAVIGATION */

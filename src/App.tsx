@@ -27,8 +27,6 @@ import '@ionic/react/css/display.css'
 
 /* Theme variables */
 import './theme/variables.css'
-/* your custom styles */
-import './config/styles/styles.css'
 
 import NavigationProvider from './components/Navigation/NavigationProvider'
 import MainPage from './pages/Main'
