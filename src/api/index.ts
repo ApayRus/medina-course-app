@@ -12,7 +12,7 @@ export const getSubs = async (path: string) => {
 	const [bookPath, ...rest] = pathArray
 	const pagePath = rest.join('/')
 	const { data: subs } = await axios(
-		`/content/${bookPath}/subs/${pagePath}.txt`
+		`/content/${bookPath}/main-content/${pagePath}.txt`
 	)
 	return subs as string
 }
@@ -22,7 +22,7 @@ export const getTranslation = async (path: string, trLang: string) => {
 	const [bookPath, ...rest] = pathArray
 	const pagePath = rest.join('/')
 	const { data: translation } = await axios(
-		`/content/${bookPath}/translations/${trLang}/${pagePath}.txt`
+		`/content/${bookPath}/layers/${trLang}/translation/${pagePath}.txt`
 	)
 	return translation as string
 }
