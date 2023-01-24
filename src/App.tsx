@@ -29,8 +29,6 @@ import '@ionic/react/css/display.css'
 import './theme/variables.css'
 
 import NavigationProvider from './components/Navigation/NavigationProvider'
-import MainPage from './pages/Main'
-import AboutPage from './pages/About'
 import AppStateProvider from './components/AppStateProvider'
 import PlayerProvider from './components/Player/Provider'
 import PhrasesProvider from './components/Phrases/Provider'
