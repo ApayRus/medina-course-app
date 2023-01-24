@@ -1,7 +1,7 @@
 {
-  "name": "ionic-book-player-ismail",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "react"
+	"name": "ionic-learning-app-core",
+	"integrations": {
+		"capacitor": {}
+	},
+	"type": "react"
 }

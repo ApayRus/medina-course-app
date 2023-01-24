@@ -1,8 +1,7 @@
 {
-	"name": "ionic-book-player-ismail",
+	"name": "ionic-learning-app-core",
 	"version": "0.0.1",
 	"private": true,
-	"homepage": "https://ismail-player.netlify.app/",
 	"dependencies": {
 		"@capacitor/app": "4.1.1",
 		"@capacitor/core": "4.6.1",
