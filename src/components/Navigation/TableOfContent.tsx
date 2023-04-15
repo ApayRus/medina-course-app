@@ -48,59 +48,61 @@ const TableOfContentComponent: React.FC<TableOfContentProps> = ({
 	const { pathname: currentPage } = useLocation()
 
 	return (
-		<IonAccordionGroup ref={accordionGroup} multiple={true}>
-			{content.map(item => {
-				const { title, id: itemPath, type } = item
-				const path = [...parents, itemPath].join('/')
-				const { title: titleTr } =
-					getNavItemInfo(flatTableOfContentTr, path) || {}
+		<div className='toc'>
+			<IonAccordionGroup ref={accordionGroup} multiple={true}>
+				{content.map(item => {
+					const { title, id: itemPath, type } = item
+					const path = [...parents, itemPath].join('/')
+					const { title: titleTr } =
+						getNavItemInfo(flatTableOfContentTr, path) || {}
 
-				if (type !== 'folder') {
-					const isActive = `/${path}` === currentPage
+					if (type !== 'folder') {
+						const isActive = `/${path}` === currentPage
 
-					return (
-						<IonMenuToggle key={path} autoHide={false}>
-							<IonItem
-								routerLink={'/' + path}
-								color={isActive ? 'secondary' : ''}
-								className={isActive ? 'activeMenuItem' : ''}
-							>
-								<IonIcon
-									slot='start'
-									md={getIcon(item)}
-									style={{ color: isActive ? 'white' : '' }}
-								/>
-								<IonLabel className='ion-text-wrap'>
-									<div>{title}</div>
-									<div className='menuSubItem'>{titleTr}</div>
-								</IonLabel>
-							</IonItem>
-						</IonMenuToggle>
-					)
-				}
-				if (type === 'folder') {
-					const { content } = item
-					return (
-						<IonAccordion key={path} value={path}>
-							<IonItem slot='header' color='light'>
-								<IonIcon slot='start' md={getIcon(item)} />
-								<IonLabel className='ion-text-wrap'>
-									<div>{title}</div>
-									<div className='menuSubItem'>{titleTr}</div>
-								</IonLabel>
-							</IonItem>
-							<div className='ion-padding' slot='content'>
-								<TableOfContentComponent
-									content={content}
-									parents={[...parents, path]}
-									openedFolders={openedFolders}
-								/>
-							</div>
-						</IonAccordion>
-					)
-				} else return <></>
-			})}
-		</IonAccordionGroup>
+						return (
+							<IonMenuToggle key={path} autoHide={false}>
+								<IonItem
+									routerLink={'/' + path}
+									color={isActive ? 'secondary' : ''}
+									className={isActive ? 'activeMenuItem' : ''}
+								>
+									<IonIcon
+										slot='start'
+										md={getIcon(item)}
+										style={{ color: isActive ? 'white' : '' }}
+									/>
+									<IonLabel className='ion-text-wrap'>
+										<div className='menuMainItem'>{title}</div>
+										<div className='menuSubItem'>{titleTr}</div>
+									</IonLabel>
+								</IonItem>
+							</IonMenuToggle>
+						)
+					}
+					if (type === 'folder') {
+						const { content } = item
+						return (
+							<IonAccordion key={path} value={path}>
+								<IonItem slot='header' color='light'>
+									<IonIcon slot='start' md={getIcon(item)} />
+									<IonLabel className='ion-text-wrap'>
+										<div>{title}</div>
+										<div className='menuSubItem'>{titleTr}</div>
+									</IonLabel>
+								</IonItem>
+								<div className='ion-padding' slot='content'>
+									<TableOfContentComponent
+										content={content}
+										parents={[...parents, path]}
+										openedFolders={openedFolders}
+									/>
+								</div>
+							</IonAccordion>
+						)
+					} else return <></>
+				})}
+			</IonAccordionGroup>
+		</div>
 	)
 }
 
