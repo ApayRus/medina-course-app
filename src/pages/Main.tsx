@@ -1,6 +1,7 @@
 import { IonContent, /* IonImg, */ IonPage, IonText } from '@ionic/react'
 import Header from './Header'
 import styles from './Main.module.css'
+import Config from '../components/Congif'
 
 const MainPage: React.FC = () => {
 	return (
@@ -8,6 +9,7 @@ const MainPage: React.FC = () => {
 			<Header />
 			<IonContent fullscreen>
 				<div className={styles.container}>
+					<Config />
 					<IonText color='primary'>
 						<h1 className={styles.h1}>اللغة العربية لغير ناطقين بها</h1>
 					</IonText>

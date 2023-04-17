@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { TableOfContentType } from '../components/Navigation/types'
+import { Config } from '../components/AppStateProvider'
 
 export const getToc = async (trLang?: string) => {
 	const lang = trLang ? trLang : ''
@@ -25,6 +26,11 @@ export const getTranslation = async (path: string, trLang: string) => {
 		`/content/${bookPath}/layers/${trLang}/translation/${pagePath}.txt`
 	)
 	return translation as string
+}
+
+export const getConfig = async () => {
+	const { data: config } = await axios(`/config.json`)
+	return config as Config
 }
 
 async function readFile(fileUrl: string) {

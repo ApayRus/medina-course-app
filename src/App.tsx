@@ -32,6 +32,7 @@ import NavigationProvider from './components/Navigation/NavigationProvider'
 import AppStateProvider from './components/AppStateProvider'
 import PlayerProvider from './components/Player/Provider'
 import PhrasesProvider from './components/Phrases/Provider'
+import Main from './pages/Main'
 
 setupIonicReact()
 
@@ -44,6 +45,9 @@ const App: React.FC = () => {
 						<IonSplitPane contentId='main'>
 							<Menu />
 							<IonRouterOutlet id='main'>
+								<Route path='/'>
+									<Main />
+								</Route>
 								<Route path='/:path+'>
 									<PlayerProvider>
 										<PhrasesProvider>
