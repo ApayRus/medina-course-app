@@ -30,7 +30,7 @@ const MediaPage: React.FC = () => {
 	} = useContext(PhrasesContext)
 
 	const {
-		state: { trLang }
+		state: { trLang, layers }
 	} = useContext(AppStateContext)
 
 	const navItemInfo = getNavItemInfo(flatTableOfContent, path)
@@ -41,8 +41,21 @@ const MediaPage: React.FC = () => {
 
 	useEffect(() => {
 		const loadAndParseSubs = async () => {
-			const subsText = await getSubs(path)
-			const translationText = await getTranslation(path, trLang)
+			let subsText = ''
+
+			try {
+				subsText = await getSubs(path, layers)
+			} catch (e) {
+				console.log(e)
+			}
+
+			let translationText = ''
+
+			try {
+				translationText = await getTranslation(path, trLang)
+			} catch (e) {
+				console.log(e)
+			}
 
 			const phrases: Phrase[] = subsText
 				? parseSubs(subsText, false).map(elem => ({
@@ -58,12 +71,15 @@ const MediaPage: React.FC = () => {
 				: []
 			const zeroPhrase = { start: 0, end: 0, id: 0, text: '' }
 			const zeroPhraseTr = { id: 0, text: '' }
+			console.log(phrases)
 			setPhrases([zeroPhrase, ...phrases])
 			setPhrasesTr([zeroPhraseTr, ...phrasesTr])
 		}
 
-		loadAndParseSubs()
-	}, [path])
+		if (layers.length > 0) {
+			loadAndParseSubs()
+		}
+	}, [path, layers])
 
 	useEffect(() => {
 		setMediaLink(mediaLink)
