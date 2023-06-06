@@ -43,12 +43,7 @@ const NavigationProvider: React.FC<Props> = ({ children }) => {
 		const readServerData = async () => {
 			const toc = await getToc()
 			const tocTr = await getToc(trLang)
-			// const [toc, tocTr] = await Promise.all([
-			// 	getToc(),
-			// 	getToc(trLang)
-			// ])
-			console.log(toc)
-			// console.log(tocTr)
+
 			const tableOfContent = toc
 			const flatTableOfContent = getFlatTableOfContent(tableOfContent, [])
 			const flatTableOfContentTr = getFlatTableOfContent(tocTr, [])
