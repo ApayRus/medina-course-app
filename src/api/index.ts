@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { TableOfContentType } from '../components/Navigation/types'
-import { Config, Layer } from '../components/AppStateProvider'
+import { Config, LayerToDisplay } from '../components/AppStateProvider'
 
 export const getToc = async (trLang?: string) => {
 	const lang = trLang ? trLang : ''
@@ -8,7 +8,7 @@ export const getToc = async (trLang?: string) => {
 	return toc as TableOfContentType
 }
 
-export const getSubs = async (path: string, layers: Layer[]) => {
+export const getSubs = async (path: string, layers: LayerToDisplay[]) => {
 	const pathArray = path.split('/')
 	const [bookPath, ...rest] = pathArray
 	const pagePath = rest.join('/')

@@ -1,44 +1,52 @@
 import { IonLoading } from '@ionic/react'
 import { createContext, useEffect, useState } from 'react'
 import { getConfig } from '../api'
-import { getLayers } from '../functions/config'
+import { getFlatLayers } from '../functions/config'
 
-interface LangLayer {
-	code: string
-	title: string
-	checked?: boolean
-}
+/* 
+Layers in config file are a tree to visualize checkboxes in nested way 
+Layers in app state is a flat array, to know which layers we should load and in which order to display them
+*/
 
-export interface Layer {
+export interface LayerToDisplay {
 	path: string
-	langTitle: string
-	layerTitle: string
+	title: string
 	checked?: boolean
+	main?: boolean
 }
 
-interface Language {
-	code: string
+export interface LayerItemInConfig {
+	id: string
 	title: string
-	layers: LangLayer[]
+	checked?: boolean
+	main?: boolean
 }
+
+export interface LayerFolderInConfig {
+	id: string
+	title: string
+	content: ConfigLayers
+}
+
+export type ConfigLayers = Array<LayerItemInConfig | LayerFolderInConfig>
 
 export interface Config {
-	languages: Language[]
+	layers: ConfigLayers
 }
 
-interface State {
+export interface AppState {
 	loading: boolean
 	trLang: string
 	config: Config // all possible languages/layers
-	layers: Layer[] // ['en/main', 'ru/main'] // active layers to display
+	layers: LayerToDisplay[] // ['en/main', 'ru/main'] // active layers to display
 }
 
 interface Methods {
-	update: (newValues: Partial<State>) => void
+	update: (newValues: Partial<AppState>) => void
 }
 
 interface ContextType {
-	state: State
+	state: AppState
 	methods: Methods
 }
 
@@ -53,7 +61,7 @@ export const AppStateContext = createContext<ContextType>(defaultContextValue)
 const defaultConfig = {} as Config
 
 const AppStateProvider: React.FC<Props> = ({ children }) => {
-	const [state, setState] = useState<State>({
+	const [state, setState] = useState<AppState>({
 		loading: true,
 		trLang: 'ru',
 		config: defaultConfig,
@@ -63,11 +71,53 @@ const AppStateProvider: React.FC<Props> = ({ children }) => {
 
 	useEffect(() => {
 		const loadConfig = async () => {
-			const config = await getConfig()
+			/* 
+			scenarios:
+			1) a first open of the app, load default config and put to LS
+			2) non first open, config the same, get state from LS 
+			3) non first open, a new config, load config from Server, update layers "checked" from LS 
+			*/
 
-			setState(oldState => ({ ...oldState, config }))
-			const layers = getLayers(config)
-			setState(oldState => ({ ...oldState, layers }))
+			const configServer = await getConfig()
+
+			let config, layers
+
+			const appStateLSString = localStorage.getItem('appState') || `{}`
+			const appStateLS = JSON.parse(appStateLSString) as AppState
+			const { config: configLS, layers: layersLS } = appStateLS
+
+			// 1)
+			if (appStateLSString === '{}') {
+				config = configServer
+				layers = getFlatLayers({
+					layers: config.layers,
+					parentIds: [],
+					parentTitles: []
+				})
+			}
+
+			// 2)
+			else if (JSON.stringify(configLS) === JSON.stringify(configServer)) {
+				config = configLS
+				layers = layersLS
+			}
+
+			// 3)
+			else {
+				config = configServer
+				const layersServer = getFlatLayers({
+					layers: config.layers,
+					parentIds: [],
+					parentTitles: []
+				})
+				layers = layersServer.map(layer => {
+					const layerLS = layersLS.find(elem => elem.path === layer.path)
+					const checked = layerLS?.checked || false
+					return { ...layer, checked }
+				})
+			}
+
+			update({ config: configServer, layers })
 		}
 		loadConfig()
 	}, [])
@@ -76,11 +126,17 @@ const AppStateProvider: React.FC<Props> = ({ children }) => {
 		setOpenLoadingOverlay(state.loading)
 	}, [state.loading])
 
-	const update = (newValues: Partial<State>) => {
-		setState(oldState => ({ ...oldState, ...newValues }))
+	const update = (newValues: Partial<AppState>) => {
+		setState(oldState => {
+			const newState = { ...oldState, ...newValues }
+			if ('layers' in newValues) {
+				localStorage.setItem('appState', JSON.stringify(newState))
+			}
+			return newState
+		})
 	}
 
-	const contextValue: { state: State; methods: Methods } = {
+	const contextValue: { state: AppState; methods: Methods } = {
 		state,
 		methods: { update }
 	}
