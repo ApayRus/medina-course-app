@@ -1,15 +1,28 @@
-import { IonContent, /* IonImg, */ IonPage, IonText } from '@ionic/react'
+import {
+	IonButton,
+	IonContent,
+	/* IonImg, */ IonPage,
+	IonText
+} from '@ionic/react'
 import Header from './Header'
 import styles from './Main.module.css'
-import Config from '../components/Congif'
+import { useContext } from 'react'
+import { ModalContext } from '../components/Modals/ModalsProvider'
+// import Config from '../components/Config'
 
 const MainPage: React.FC = () => {
+	const {
+		methods: { openModal }
+	} = useContext(ModalContext)
+
 	return (
 		<IonPage>
 			<Header />
 			<IonContent fullscreen>
 				<div className={styles.container}>
-					<Config />
+					<IonButton onClick={() => openModal({ contentComponent: 'Config' })}>
+						Open modal
+					</IonButton>
 					<IonText color='primary'>
 						<h1 className={styles.h1}>اللغة العربية لغير ناطقين بها</h1>
 					</IonText>

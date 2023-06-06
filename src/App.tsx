@@ -33,33 +33,36 @@ import AppStateProvider from './components/AppStateProvider'
 import PlayerProvider from './components/Player/Provider'
 import PhrasesProvider from './components/Phrases/Provider'
 import Main from './pages/Main'
+import ModalProvider from './components/Modals/ModalsProvider'
 
 setupIonicReact()
 
 const App: React.FC = () => {
 	return (
 		<AppStateProvider>
-			<NavigationProvider>
-				<IonApp>
-					<IonReactRouter>
-						<IonSplitPane contentId='main'>
-							<Menu />
-							<IonRouterOutlet id='main'>
-								<Route path='/'>
-									<Main />
-								</Route>
-								<Route path='/:path+'>
-									<PlayerProvider>
-										<PhrasesProvider>
-											<MediaPage />
-										</PhrasesProvider>
-									</PlayerProvider>
-								</Route>
-							</IonRouterOutlet>
-						</IonSplitPane>
-					</IonReactRouter>
-				</IonApp>
-			</NavigationProvider>
+			<ModalProvider>
+				<NavigationProvider>
+					<IonApp>
+						<IonReactRouter>
+							<IonSplitPane contentId='main'>
+								<Menu />
+								<IonRouterOutlet id='main'>
+									<Route path='/'>
+										<Main />
+									</Route>
+									<Route path='/:path+'>
+										<PlayerProvider>
+											<PhrasesProvider>
+												<MediaPage />
+											</PhrasesProvider>
+										</PlayerProvider>
+									</Route>
+								</IonRouterOutlet>
+							</IonSplitPane>
+						</IonReactRouter>
+					</IonApp>
+				</NavigationProvider>
+			</ModalProvider>
 		</AppStateProvider>
 	)
 }
