@@ -53,7 +53,12 @@ const ModalProvider: React.FC<Props> = ({ children }) => {
 	const contextValue = { state, methods }
 
 	const modalWithContent = (
-		<IonModal isOpen={state.isOpen}>
+		<IonModal
+			isOpen={state.isOpen}
+			onDidDismiss={() =>
+				setState(oldState => ({ ...oldState, isOpen: false }))
+			}
+		>
 			<IonHeader>
 				<IonToolbar>
 					<IonTitle>Modal</IonTitle>
