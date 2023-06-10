@@ -1,22 +1,19 @@
 import { IonCheckbox, IonItem, IonLabel, IonText } from '@ionic/react'
-import {
-	AppStateContext,
-	ConfigLayers,
-	LayerToDisplay
-} from '../AppStateProvider'
-import { useContext } from 'react'
+import { AppState, ConfigLayers, LayerToDisplay } from '../AppStateProvider'
 
 interface Props {
 	content: ConfigLayers
 	parentIds: string[]
+	layers: LayerToDisplay[]
+	updateAppState: (state: Partial<AppState>) => void
 }
 
-const CheckboxesTree: React.FC<Props> = ({ content, parentIds }) => {
-	const {
-		state: { layers },
-		methods: { update: updateAppState }
-	} = useContext(AppStateContext)
-
+const CheckboxesTree: React.FC<Props> = ({
+	content,
+	parentIds,
+	layers,
+	updateAppState
+}) => {
 	return (
 		<div className='checkboxes-tree'>
 			{content.map(elem => {
@@ -27,12 +24,16 @@ const CheckboxesTree: React.FC<Props> = ({ content, parentIds }) => {
 					return (
 						<div key={`${path}`}>
 							<IonText>
-								<h3>{title}</h3>
+								<div className={`config-header-${parentIds.length}`}>
+									{title}
+								</div>
 							</IonText>
 							<div className='ion-padding' slot='content'>
 								<CheckboxesTree
 									content={content}
 									parentIds={[...parentIds, id]}
+									layers={layers}
+									updateAppState={updateAppState}
 								/>
 							</div>
 						</div>
@@ -56,6 +57,8 @@ const CheckboxesTree: React.FC<Props> = ({ content, parentIds }) => {
 									const index = layers.findIndex(elem => elem.path === path)
 									updatedLayers[index]['checked'] = checked
 									console.log('aaaa')
+									console.log('updatedLayers')
+									console.log(updatedLayers)
 									updateAppState({ layers: [...updatedLayers] })
 								}}
 							></IonCheckbox>
