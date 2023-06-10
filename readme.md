@@ -44,3 +44,20 @@ Then you should place related to each layer files to path: `/content/folder/laye
 - `content/alices-adventures/en/main`
 - `content/alices-adventures/en/notes`
 - `content/alices-adventures/ru/transliteration`
+
+## Firebase storage cors
+
+````json
+[
+ {
+  "origin": ["http://localhost:3000"],
+  "method": ["GET"],
+  "maxAgeSeconds": 3600
+ }
+]
+
+(remove from cors.json all tabs \t )
+
+```bash
+gcloud storage buckets update gs://ismail-player.appspot.com --cors-file=cors.json
+````

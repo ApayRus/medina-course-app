@@ -31,3 +31,5 @@ yarn-error.log*
 # my 
 /public/assets/audios
 *.env 
+
+/src/firebase/config.ts
