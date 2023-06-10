@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from 'react'
-import { getToc } from '../../api'
+import { getToc, getTocs } from '../../api'
 import { getFlatTableOfContent } from '../../utils/utils'
 import { AppStateContext } from '../AppStateProvider'
 import { TableOfContentType, FlatNavItem } from './types'
@@ -34,7 +34,7 @@ export const NavigationContext = createContext<ContextType>({
 const NavigationProvider: React.FC<Props> = ({ children }) => {
 	const {
 		methods: { update: updateAppState },
-		state: { trLang }
+		state: { trLang, layers, configLoaded }
 	} = useContext(AppStateContext)
 
 	const [state, setState] = useState<State>(defaultContextValue)
@@ -42,6 +42,9 @@ const NavigationProvider: React.FC<Props> = ({ children }) => {
 	useEffect(() => {
 		const readServerData = async () => {
 			const toc = await getToc()
+			const tocs = await getTocs(layers)
+			updateAppState({ tocsLoaded: true })
+
 			const tocTr = await getToc(trLang)
 
 			const tableOfContent = toc
@@ -55,10 +58,12 @@ const NavigationProvider: React.FC<Props> = ({ children }) => {
 				loaded: true
 			}))
 		}
-		readServerData()
+		if (configLoaded) {
+			readServerData()
+		}
 
 		return () => {}
-	}, [])
+	}, [configLoaded])
 
 	useEffect(() => {
 		updateAppState({ loading: !state.loaded })

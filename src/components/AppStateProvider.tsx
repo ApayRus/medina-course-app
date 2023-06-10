@@ -36,6 +36,8 @@ export interface Config {
 
 export interface AppState {
 	loading: boolean
+	configLoaded: boolean
+	tocsLoaded: boolean
 	trLang: string
 	config: Config // all possible languages/layers
 	layers: LayerToDisplay[] // ['en/main', 'ru/main'] // active layers to display
@@ -63,6 +65,8 @@ const defaultConfig = {} as Config
 const AppStateProvider: React.FC<Props> = ({ children }) => {
 	const [state, setState] = useState<AppState>({
 		loading: true,
+		configLoaded: false,
+		tocsLoaded: false,
 		trLang: 'ru',
 		config: defaultConfig,
 		layers: []
@@ -79,6 +83,7 @@ const AppStateProvider: React.FC<Props> = ({ children }) => {
 			*/
 
 			const configServer = await getConfig()
+			update({ configLoaded: true })
 
 			let config, layers
 
