@@ -40,29 +40,25 @@ setupIonicReact()
 const App: React.FC = () => {
 	return (
 		<AppStateProvider>
-			<ModalProvider>
-				<NavigationProvider>
+			<NavigationProvider>
+				<ModalProvider>
 					<IonApp>
 						<IonReactRouter>
 							<IonSplitPane contentId='main'>
 								<Menu />
 								<IonRouterOutlet id='main'>
-									<Route path='/'>
-										<Main />
-									</Route>
 									<Route path='/:path+'>
-										<PlayerProvider>
-											<PhrasesProvider>
-												<MediaPage />
-											</PhrasesProvider>
-										</PlayerProvider>
+										<MediaPage />
+									</Route>
+									<Route path='/' exact>
+										<Main />
 									</Route>
 								</IonRouterOutlet>
 							</IonSplitPane>
 						</IonReactRouter>
 					</IonApp>
-				</NavigationProvider>
-			</ModalProvider>
+				</ModalProvider>
+			</NavigationProvider>
 		</AppStateProvider>
 	)
 }
