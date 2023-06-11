@@ -1,4 +1,4 @@
-import { IonLoading } from '@ionic/react'
+import { IonSpinner } from '@ionic/react'
 import { createContext, useEffect, useState } from 'react'
 import { getConfig } from '../api'
 import { getFlatLayers } from '../functions/config'
@@ -71,7 +71,6 @@ const AppStateProvider: React.FC<Props> = ({ children }) => {
 		config: defaultConfig,
 		layers: []
 	})
-	const [openLoadingOverlay, setOpenLoadingOverlay] = useState(false)
 
 	useEffect(() => {
 		const loadConfig = async () => {
@@ -128,8 +127,9 @@ const AppStateProvider: React.FC<Props> = ({ children }) => {
 	}, [])
 
 	useEffect(() => {
-		setOpenLoadingOverlay(state.loading)
-	}, [state.loading])
+		const loading = !(state.configLoaded && state.tocsLoaded)
+		update({ loading })
+	}, [state.configLoaded, state.tocsLoaded])
 
 	const update = (newValues: Partial<AppState>) => {
 		setState(oldState => {
@@ -146,10 +146,18 @@ const AppStateProvider: React.FC<Props> = ({ children }) => {
 		methods: { update }
 	}
 
+	const loadingSpinner = (
+		<div style={{ position: 'fixed', top: 10, left: 10 }}>
+			<IonSpinner />
+		</div>
+	)
+
 	return (
 		<AppStateContext.Provider value={contextValue}>
-			<IonLoading isOpen={openLoadingOverlay} />
-			{children}
+			<div>
+				{state.loading && loadingSpinner}
+				{children}
+			</div>
 		</AppStateContext.Provider>
 	)
 }

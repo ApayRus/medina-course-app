@@ -8,7 +8,6 @@ interface State {
 	tableOfContent: TableOfContentType
 	flatTableOfContent: Array<FlatNavItem>
 	flatTableOfContentTr: Array<FlatNavItem>
-	loaded: boolean
 }
 
 interface Props {
@@ -23,8 +22,7 @@ interface ContextType {
 const defaultContextValue = {
 	tableOfContent: [],
 	flatTableOfContent: [],
-	flatTableOfContentTr: [],
-	loaded: false
+	flatTableOfContentTr: []
 }
 
 export const NavigationContext = createContext<ContextType>({
@@ -54,8 +52,7 @@ const NavigationProvider: React.FC<Props> = ({ children }) => {
 				...oldState,
 				tableOfContent,
 				flatTableOfContent,
-				flatTableOfContentTr,
-				loaded: true
+				flatTableOfContentTr
 			}))
 		}
 		if (configLoaded) {
@@ -64,10 +61,6 @@ const NavigationProvider: React.FC<Props> = ({ children }) => {
 
 		return () => {}
 	}, [configLoaded])
-
-	useEffect(() => {
-		updateAppState({ loading: !state.loaded })
-	}, [state.loaded])
 
 	return (
 		<NavigationContext.Provider value={{ state /* , methods */ }}>
