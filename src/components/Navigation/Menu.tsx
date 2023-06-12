@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { IonMenu, IonContent } from '@ionic/react'
+import { IonMenu, IonContent, IonSpinner } from '@ionic/react'
 
 import TableOfContent from './TableOfContent'
 
@@ -7,17 +7,25 @@ import { NavigationContext } from './NavigationProvider'
 
 const Menu: React.FC = () => {
 	const {
-		state: { tableOfContent }
+		state: { tocs, flatTocs }
 	} = useContext(NavigationContext)
+
+	const content = tocs?.[0]?.data
 
 	return (
 		<IonMenu contentId='main' type='overlay'>
 			<IonContent>
-				<TableOfContent
-					content={tableOfContent}
-					parents={[]}
-					openedFolders={['book1']}
-				/>
+				{content ? (
+					<TableOfContent
+						{...{ content, flatTocs, tocs }}
+						parents={[]}
+						openedFolders={['book1']}
+					/>
+				) : (
+					<div style={{ textAlign: 'center', marginTop: 20 }}>
+						<IonSpinner name='circles' />
+					</div>
+				)}
 			</IonContent>
 		</IonMenu>
 	)

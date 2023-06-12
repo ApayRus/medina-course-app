@@ -1,3 +1,5 @@
+import { FlatToc, Toc } from './NavigationProvider'
+
 export type NavItemType = 'folder' | 'html' | 'richMedia'
 
 export type IconName =
@@ -31,6 +33,8 @@ export type TableOfContentType = Array<Page | Folder> | []
 
 export interface TableOfContentProps {
 	content: TableOfContentType
+	tocs: Toc[]
+	flatTocs: FlatToc[]
 	parents: string[]
 	openedFolders: string[]
 }

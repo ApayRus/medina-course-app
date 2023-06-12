@@ -82,7 +82,6 @@ const AppStateProvider: React.FC<Props> = ({ children }) => {
 			*/
 
 			const configServer = await getConfig()
-			update({ configLoaded: true })
 
 			let config, layers
 
@@ -121,7 +120,7 @@ const AppStateProvider: React.FC<Props> = ({ children }) => {
 				})
 			}
 
-			update({ config: configServer, layers })
+			update({ config: configServer, layers, configLoaded: true })
 		}
 		loadConfig()
 	}, [])

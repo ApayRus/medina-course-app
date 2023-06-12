@@ -4,12 +4,6 @@ import { LayerToDisplay } from '../components/AppStateProvider'
 import { getDownloadURL, ref } from 'firebase/storage'
 import { storage } from '../firebase'
 
-export const getToc = async (trLang?: string) => {
-	const lang = trLang ? trLang : ''
-	const { data: toc } = await axios(`/content/TOC_${lang}.json`)
-	return toc as TableOfContentType
-}
-
 export const getTocs = async (layers: LayerToDisplay[]) => {
 	const tocLayers = layers.filter(
 		elem => elem.path.match('toc/') && elem.checked

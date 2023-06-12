@@ -1,4 +1,4 @@
-import { IonButton, IonIcon, IonMenuButton } from '@ionic/react'
+import { IonButton, IonIcon, IonMenuButton, IonSpinner } from '@ionic/react'
 import {
 	chevronBack as PreviousChapterIcon,
 	chevronForward as NextChapterIcon
@@ -17,7 +17,7 @@ interface State {
 
 const NavigationButtons = () => {
 	const {
-		state: { flatTableOfContent }
+		state: { flatTocs }
 	} = useContext(NavigationContext)
 
 	const { pathname: currentPage } = useLocation()
@@ -26,8 +26,10 @@ const NavigationButtons = () => {
 
 	const [state, setState] = useState({} as State)
 
+	const flatTableOfContent = flatTocs?.[0]?.data
+
 	useEffect(() => {
-		if (currentPage) {
+		if (currentPage && flatTableOfContent) {
 			const neighbors = getPageNeighbors(flatTableOfContent, currentPage)
 			setState(neighbors)
 		}
@@ -41,7 +43,7 @@ const NavigationButtons = () => {
 		router.push(state.prevItem.path)
 	}
 
-	return (
+	return flatTableOfContent ? (
 		<>
 			{state.prevItem && (
 				<IonButton onClick={goPrev}>
@@ -55,6 +57,8 @@ const NavigationButtons = () => {
 				</IonButton>
 			)}
 		</>
+	) : (
+		<IonSpinner name='dots' />
 	)
 }
 

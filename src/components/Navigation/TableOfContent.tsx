@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useContext } from 'react'
+import React, { useRef, useEffect } from 'react'
 
 import {
 	IonIcon,
@@ -29,6 +29,8 @@ const getIcon = (item: Folder | Page) => {
 
 const TableOfContentComponent: React.FC<TableOfContentProps> = ({
 	content,
+	tocs,
+	flatTocs,
 	parents,
 	openedFolders
 }) => {
@@ -41,20 +43,30 @@ const TableOfContentComponent: React.FC<TableOfContentProps> = ({
 		accordionGroup.current.value = openedFolders // opened accordions
 	}, [])
 
-	const {
-		state: { flatTableOfContentTr }
-	} = useContext(NavigationContext)
-
 	const { pathname: currentPage } = useLocation()
 
 	return (
 		<div className='toc'>
 			<IonAccordionGroup ref={accordionGroup} multiple={true}>
 				{content.map(item => {
-					const { title, id: itemPath, type } = item
+					const { id: itemPath, type } = item
 					const path = [...parents, itemPath].join('/')
-					const { title: titleTr } =
-						getNavItemInfo(flatTableOfContentTr, path) || {}
+
+					const titles = flatTocs.map(flatToc => {
+						const { info: layerInfo, data } = flatToc
+						const itemInfo = getNavItemInfo(data, path)
+						return { layerInfo, itemInfo }
+					})
+
+					const titlesJSX = titles.map((elem, index) => {
+						const { itemInfo } = elem
+						const { title = '' } = itemInfo || {}
+						return (
+							<div key={`title-${index}`} className={`title-layer-${index}`}>
+								{title}
+							</div>
+						)
+					})
 
 					if (type !== 'folder') {
 						const isActive = `/${path}` === currentPage
@@ -71,10 +83,7 @@ const TableOfContentComponent: React.FC<TableOfContentProps> = ({
 										md={getIcon(item)}
 										style={{ color: isActive ? 'white' : '' }}
 									/>
-									<IonLabel className='ion-text-wrap'>
-										<div className='menuMainItem'>{title}</div>
-										<div className='menuSubItem'>{titleTr}</div>
-									</IonLabel>
+									<IonLabel className='ion-text-wrap'>{titlesJSX}</IonLabel>
 								</IonItem>
 							</IonMenuToggle>
 						)
@@ -85,14 +94,13 @@ const TableOfContentComponent: React.FC<TableOfContentProps> = ({
 							<IonAccordion key={path} value={path}>
 								<IonItem slot='header' color='light'>
 									<IonIcon slot='start' md={getIcon(item)} />
-									<IonLabel className='ion-text-wrap'>
-										<div>{title}</div>
-										<div className='menuSubItem'>{titleTr}</div>
-									</IonLabel>
+									<IonLabel className='ion-text-wrap'>{titlesJSX}</IonLabel>
 								</IonItem>
 								<div className='ion-padding' slot='content'>
 									<TableOfContentComponent
 										content={content}
+										tocs={tocs}
+										flatTocs={flatTocs}
 										parents={[...parents, path]}
 										openedFolders={openedFolders}
 									/>
