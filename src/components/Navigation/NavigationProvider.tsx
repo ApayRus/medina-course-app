@@ -74,29 +74,6 @@ const NavigationProvider: React.FC<Props> = ({ children }) => {
 		return () => {}
 	}, [configLoaded])
 
-	// layers changed
-	useEffect(() => {
-		if (configLoaded && layers.length > 0) {
-			const layerPaths = layers
-				.filter(elem => elem.checked)
-				.map(elem => elem.path)
-
-			const tocs = state.tocs.filter(toc => {
-				const {
-					info: { path }
-				} = toc
-				return layerPaths.includes(path)
-			})
-			const flatTocs = getFlatTocs(tocs)
-
-			setState(oldState => ({
-				...oldState,
-				tocs,
-				flatTocs
-			}))
-		}
-	}, [configLoaded, layers])
-
 	return (
 		<NavigationContext.Provider value={{ state /* , methods */ }}>
 			{children}
