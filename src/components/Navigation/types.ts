@@ -1,3 +1,4 @@
+import { LayerToDisplay } from '../AppStateProvider'
 import { FlatToc, Toc } from './NavigationProvider'
 
 export type NavItemType = 'folder' | 'html' | 'richMedia'
@@ -37,6 +38,7 @@ export interface TableOfContentProps {
 	flatTocs: FlatToc[]
 	parents: string[]
 	openedFolders: string[]
+	layers: LayerToDisplay[]
 }
 
 export interface FlatNavItem {

@@ -13,7 +13,6 @@ import * as icons from 'ionicons/icons'
 
 import { useLocation } from 'react-router-dom'
 import { Folder, Page, IconMap, TableOfContentProps } from './types'
-import { NavigationContext } from './NavigationProvider'
 import { getNavItemInfo } from '../../utils/utils'
 
 const getIcon = (item: Folder | Page) => {
@@ -31,6 +30,7 @@ const TableOfContentComponent: React.FC<TableOfContentProps> = ({
 	content,
 	tocs,
 	flatTocs,
+	layers,
 	parents,
 	openedFolders
 }) => {
@@ -44,6 +44,10 @@ const TableOfContentComponent: React.FC<TableOfContentProps> = ({
 	}, [])
 
 	const { pathname: currentPage } = useLocation()
+
+	const checkedLayerPaths = layers
+		.filter(elem => elem.path.match('toc/') && elem.checked)
+		.map(elem => elem.path)
 
 	return (
 		<div className='toc'>
@@ -60,11 +64,16 @@ const TableOfContentComponent: React.FC<TableOfContentProps> = ({
 
 					const titlesJSX = titles.map((elem, index) => {
 						const { itemInfo } = elem
+						const {
+							layerInfo: { path: layerPath }
+						} = elem
 						const { title = '' } = itemInfo || {}
 						return (
-							<div key={`title-${index}`} className={`title-layer-${index}`}>
-								{title}
-							</div>
+							checkedLayerPaths.includes(layerPath) && (
+								<div key={`title-${index}`} className={`title-layer-${index}`}>
+									{title}
+								</div>
+							)
 						)
 					})
 
@@ -101,6 +110,7 @@ const TableOfContentComponent: React.FC<TableOfContentProps> = ({
 										content={content}
 										tocs={tocs}
 										flatTocs={flatTocs}
+										layers={layers}
 										parents={[...parents, path]}
 										openedFolders={openedFolders}
 									/>

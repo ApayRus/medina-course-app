@@ -4,11 +4,16 @@ import { IonMenu, IonContent, IonSpinner } from '@ionic/react'
 import TableOfContent from './TableOfContent'
 
 import { NavigationContext } from './NavigationProvider'
+import { AppStateContext } from '../AppStateProvider'
 
 const Menu: React.FC = () => {
 	const {
 		state: { tocs, flatTocs }
 	} = useContext(NavigationContext)
+
+	const {
+		state: { layers }
+	} = useContext(AppStateContext)
 
 	const content = tocs?.[0]?.data
 
@@ -17,7 +22,7 @@ const Menu: React.FC = () => {
 			<IonContent>
 				{content ? (
 					<TableOfContent
-						{...{ content, flatTocs, tocs }}
+						{...{ content, flatTocs, tocs, layers }}
 						parents={[]}
 						openedFolders={['book1']}
 					/>
