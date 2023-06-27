@@ -29,6 +29,7 @@
 		"react-router": "^5.3.4",
 		"react-router-dom": "^5.3.4",
 		"react-scripts": "^5.0.1",
+		"react-wavesurfer-provider": "github:ApayRus/react-wavesurfer-provider",
 		"typescript": "^4.9.4",
 		"web-vitals": "^3.1.0",
 		"workbox-background-sync": "^6.5.4",

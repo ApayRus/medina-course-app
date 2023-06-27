@@ -1,3 +1,5 @@
+import { parseSubs } from 'frazy-parser'
+import { ContentLayer } from '../api'
 import {
 	FlatNavItem,
 	FlatTableOfContentType,
@@ -59,4 +61,14 @@ export const getFlatTableOfContent = (
 			}
 		})
 		.flat()
+}
+
+export function getPhrases(contentLayers: ContentLayer[]) {
+	const mainLayer = contentLayers.find(elem => elem.info.main)
+	const phrasesText = mainLayer?.data || ''
+	const phrases = parseSubs(phrasesText, false).map(elem => {
+		const { id, start, end, body: text } = elem
+		return { id, start, end, data: { text } }
+	})
+	return phrases
 }

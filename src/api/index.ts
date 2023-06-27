@@ -5,11 +5,21 @@ import { getDownloadURL, ref } from 'firebase/storage'
 import { storage } from '../firebase'
 import { Toc } from '../components/Navigation/NavigationProvider'
 
+export interface ContentLayer {
+	info: LayerToDisplay
+	data: string
+}
+
 export const getFile = async (path: string) => {
-	const link = await getDownloadURL(ref(storage, path))
-	return axios(link)
-		.then(result => result.data)
-		.catch(e => console.log(e))
+	try {
+		const link = await getDownloadURL(ref(storage, path))
+		return axios(link)
+			.then(result => result.data)
+			.catch(e => console.log(e))
+	} catch (e) {
+		console.log(e)
+		return ''
+	}
 }
 
 export const getFiles = async (paths: string[]) => {
@@ -37,4 +47,32 @@ export const getTocs = async (layers: LayerToDisplay[]) => {
 export const getConfig = async () => {
 	const config = (await getFile('config.json')) as Config
 	return config
+}
+
+export const getContentLayers = async (
+	layers: LayerToDisplay[],
+	path: string
+) => {
+	const layerInfoArray = layers.filter(
+		elem => elem.path.match('content/') && (elem.checked || elem.main)
+	)
+
+	const paths = layerInfoArray.map(layer => `${layer.path}/${path}.txt`)
+
+	const layerDataArray = (await getFiles(paths)) as string[]
+
+	const contentLayers = layerInfoArray.map((elem, index) => {
+		const info = elem
+		const data = layerDataArray[index]
+		return { info, data }
+	})
+
+	return contentLayers as ContentLayer[]
+}
+
+export const getMediaLink = async (path: string) => {
+	return getDownloadURL(ref(storage, `content/media/${path}.mp3`)).catch(e => {
+		console.log(e)
+		return ''
+	})
 }

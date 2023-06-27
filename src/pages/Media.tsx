@@ -1,7 +1,13 @@
-import { IonContent, IonFooter, IonPage, IonToolbar } from '@ionic/react'
-import { useEffect, useContext } from 'react'
+import {
+	IonContent,
+	IonFooter,
+	IonPage,
+	IonSpinner,
+	IonToolbar
+} from '@ionic/react'
+import { useEffect, useContext, useState } from 'react'
 import { useParams } from 'react-router'
-import { PlayerContext } from '../components/Player/Provider'
+// import { PlayerContext } from '../components/Player/Provider'
 import Header from './Header'
 import Player from '../components/Player'
 import PhrasesBlock from '../components/Phrases'
@@ -10,91 +16,56 @@ import { parseSubs } from 'frazy-parser'
 import { Phrase, PhraseTr } from '../components/Phrases/types'
 import { AppStateContext } from '../components/AppStateProvider'
 import { NavigationContext } from '../components/Navigation/NavigationProvider'
-import { getSubs, getTranslation } from '../api'
-import { getNavItemInfo } from '../utils/utils'
+import { getNavItemInfo, getPhrases } from '../utils/utils'
+import { ContentLayer, getContentLayers, getMediaLink } from '../api'
+import { PlayerContext } from 'react-wavesurfer-provider'
+import Player2 from '../components/Player2'
+
+interface State {
+	contentLayers: string[]
+	mediaLink: string
+}
 
 const MediaPage: React.FC = () => {
 	const { path = '' } = useParams<{ path: string }>()
 
-	const {
-		methods: { setMediaLink }
-	} = useContext(PlayerContext)
+	const [isLoaded, setIsLoaded] = useState(false)
 
 	const {
-		state: { flatTableOfContent, flatTableOfContentTr }
-	} = useContext(NavigationContext)
-
-	const {
-		methods: { setPhrases, setPhrasesTr },
-		phrasesContainerRef
-	} = useContext(PhrasesContext)
-
-	const {
-		state: { trLang, layers }
+		state: { layers, configLoaded }
 	} = useContext(AppStateContext)
 
-	const navItemInfo = getNavItemInfo(flatTableOfContent, path)
-	const navItemInfoTr = getNavItemInfo(flatTableOfContentTr, path)
-
-	const { mediaLink = '', title = '' } = navItemInfo || {}
-	const { title: titleTr = '' } = navItemInfoTr || {}
+	const { state: playerState, methods: playerMethods } =
+		useContext(PlayerContext)
 
 	useEffect(() => {
-		const loadAndParseSubs = async () => {
-			let subsText = ''
-
-			try {
-				subsText = await getSubs(path, layers)
-			} catch (e) {
-				console.log(e)
-			}
-
-			let translationText = ''
-
-			try {
-				translationText = await getTranslation(path, trLang)
-			} catch (e) {
-				console.log(e)
-			}
-
-			const phrases: Phrase[] = subsText
-				? parseSubs(subsText, false).map(elem => ({
-						...elem,
-						text: elem.body
-				  }))
-				: []
-			const phrasesTr: PhraseTr[] = translationText
-				? parseSubs(translationText, false).map(elem => ({
-						...elem,
-						text: elem.body
-				  }))
-				: []
-			const zeroPhrase = { start: 0, end: 0, id: 0, text: '' }
-			const zeroPhraseTr = { id: 0, text: '' }
-			console.log(phrases)
-			setPhrases([zeroPhrase, ...phrases])
-			setPhrasesTr([zeroPhraseTr, ...phrasesTr])
+		const loadData = async () => {
+			setIsLoaded(false)
+			const mediaLink = await getMediaLink(path)
+			playerMethods.setMediaLink(mediaLink)
+			const contentLayers = await getContentLayers(layers, path)
+			const phrases = getPhrases(contentLayers)
+			playerMethods.updatePhrases({ phrases })
+			setIsLoaded(true)
 		}
-
-		if (layers.length > 0) {
-			loadAndParseSubs()
+		if (configLoaded) {
+			loadData()
 		}
-	}, [path, layers])
+	}, [path, configLoaded])
 
-	useEffect(() => {
-		setMediaLink(mediaLink)
-	}, [flatTableOfContent, path])
+	const showSpinner = !(isLoaded && playerState?.isReady)
 
 	return (
 		<IonPage>
-			<Header title={title} titleTr={titleTr} />
-			<IonContent fullscreen ref={phrasesContainerRef}>
-				<PhrasesBlock />
+			<Header title={path} />
+			<IonContent fullscreen>
+				{showSpinner && <IonSpinner color='primary' />}
+				<div style={!showSpinner ? {} : { visibility: 'hidden' }}>
+					<Player2 />
+				</div>
 			</IonContent>
 			<IonFooter>
-				<IonToolbar>
-					<Player />
-				</IonToolbar>
+				<IonToolbar>{/* <Player /> */}</IonToolbar>
 			</IonFooter>
 		</IonPage>
 	)

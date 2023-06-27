@@ -30,10 +30,10 @@ import './theme/variables.css'
 
 import NavigationProvider from './components/Navigation/NavigationProvider'
 import AppStateProvider from './components/AppStateProvider'
-import PlayerProvider from './components/Player/Provider'
 import PhrasesProvider from './components/Phrases/Provider'
 import Main from './pages/Main'
 import ModalProvider from './components/Modals/ModalsProvider'
+import { PlayerProvider } from 'react-wavesurfer-provider'
 
 setupIonicReact()
 
@@ -48,7 +48,9 @@ const App: React.FC = () => {
 								<Menu />
 								<IonRouterOutlet id='main'>
 									<Route path='/:path+'>
-										<MediaPage />
+										<PlayerProvider>
+											<MediaPage />
+										</PlayerProvider>
 									</Route>
 									<Route path='/' exact>
 										<Main />
