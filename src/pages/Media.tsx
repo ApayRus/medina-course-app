@@ -19,7 +19,8 @@ import { NavigationContext } from '../components/Navigation/NavigationProvider'
 import { getNavItemInfo, getPhrases } from '../utils/utils'
 import { ContentLayer, getContentLayers, getMediaLink } from '../api'
 import { PlayerContext } from 'react-wavesurfer-provider'
-import Player2 from '../components/Player2'
+import Player2 from '../components/PlayerWavesurfer'
+import PlayerControls from '../components/PlayerControls'
 
 interface State {
 	contentLayers: string[]
@@ -63,9 +64,12 @@ const MediaPage: React.FC = () => {
 				<div style={!showSpinner ? {} : { visibility: 'hidden' }}>
 					<Player2 />
 				</div>
+				<pre>{JSON.stringify(playerState, null, 2)}</pre>
 			</IonContent>
 			<IonFooter>
-				<IonToolbar>{/* <Player /> */}</IonToolbar>
+				<IonToolbar>
+					<PlayerControls />{' '}
+				</IonToolbar>
 			</IonFooter>
 		</IonPage>
 	)

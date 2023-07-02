@@ -13,11 +13,10 @@ export default function Player2() {
 	}, [mediaLink]) */
 
 	return (
-		<div>
+		<div /* style={{ display: 'none' }} */>
 			<audio id='mediaElement' src={playerState.mediaLink} />
 			<div id='waveformContainer' />
 			<div id='timelineContainer' />
-			<pre>{JSON.stringify(playerState, null, 2)}</pre>
 		</div>
 	)
 }

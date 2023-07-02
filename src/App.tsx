@@ -48,7 +48,7 @@ const App: React.FC = () => {
 								<Menu />
 								<IonRouterOutlet id='main'>
 									<Route path='/:path+'>
-										<PlayerProvider>
+										<PlayerProvider peaks={[]}>
 											<MediaPage />
 										</PlayerProvider>
 									</Route>
