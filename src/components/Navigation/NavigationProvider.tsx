@@ -1,8 +1,8 @@
 import React, { createContext, useState, useEffect, useContext } from 'react'
 import { getTocs } from '../../api'
-import { getFlatTableOfContent } from '../../utils/utils'
+import { getFlatTocs, getPageInfo as getPageInfoUtil } from '../../utils/utils'
 import { AppStateContext, LayerToDisplay } from '../AppStateProvider'
-import { TableOfContentType, FlatNavItem } from './types'
+import { TableOfContentType, FlatNavItem, NavItemType } from './types'
 
 export interface Toc {
 	info: LayerToDisplay
@@ -19,13 +19,25 @@ interface State {
 	flatTocs: FlatToc[]
 }
 
+export interface PageInfo {
+	layers: {
+		layerInfo: LayerToDisplay
+		itemInfo: FlatNavItem
+	}[]
+	type: NavItemType
+}
+
+interface Methods {
+	getPageInfo: (path: string) => PageInfo
+}
+
 interface Props {
 	children: JSX.Element | JSX.Element[]
 }
 
 interface ContextType {
 	state: State
-	// methods: Methods
+	methods: Methods
 }
 
 const defaultContextValue = {
@@ -33,17 +45,7 @@ const defaultContextValue = {
 	flatTocs: []
 }
 
-export const NavigationContext = createContext<ContextType>({
-	state: defaultContextValue
-})
-
-const getFlatTocs = (tocs: Toc[]) => {
-	return tocs.map(elem => {
-		const { data } = elem
-		const flatToc = getFlatTableOfContent(data, [])
-		return { ...elem, data: flatToc }
-	})
-}
+export const NavigationContext = createContext<ContextType>({} as ContextType)
 
 const NavigationProvider: React.FC<Props> = ({ children }) => {
 	const {
@@ -74,8 +76,14 @@ const NavigationProvider: React.FC<Props> = ({ children }) => {
 		return () => {}
 	}, [configLoaded])
 
+	const getPageInfo = (path: string) => {
+		return getPageInfoUtil({ path, flatTocs: state.flatTocs })
+	}
+
+	const methods = { getPageInfo }
+
 	return (
-		<NavigationContext.Provider value={{ state /* , methods */ }}>
+		<NavigationContext.Provider value={{ state, methods }}>
 			{children}
 		</NavigationContext.Provider>
 	)

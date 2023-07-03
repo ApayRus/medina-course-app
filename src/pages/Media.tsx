@@ -1,33 +1,20 @@
-import {
-	IonContent,
-	IonFooter,
-	IonPage,
-	IonSpinner,
-	IonToolbar
-} from '@ionic/react'
+import { IonContent, IonFooter, IonSpinner, IonToolbar } from '@ionic/react'
 import { useEffect, useContext, useState } from 'react'
 import { useParams } from 'react-router'
-// import { PlayerContext } from '../components/Player/Provider'
-import Header from './Header'
-import Player from '../components/Player'
-import PhrasesBlock from '../components/Phrases'
-import { PhrasesContext } from '../components/Phrases/Provider'
-import { parseSubs } from 'frazy-parser'
-import { Phrase, PhraseTr } from '../components/Phrases/types'
 import { AppStateContext } from '../components/AppStateProvider'
-import { NavigationContext } from '../components/Navigation/NavigationProvider'
-import { getNavItemInfo, getPhrases } from '../utils/utils'
-import { ContentLayer, getContentLayers, getMediaLink } from '../api'
+import { getPhrases } from '../utils/utils'
+import { getContentLayers, getMediaLink } from '../api'
 import { PlayerContext } from 'react-wavesurfer-provider'
-import Player2 from '../components/PlayerWavesurfer'
+import PlayerWavesurfer from '../components/PlayerWavesurfer'
 import PlayerControls from '../components/PlayerControls'
+import { NavigationContext } from '../components/Navigation/NavigationProvider'
 
 interface State {
 	contentLayers: string[]
 	mediaLink: string
 }
 
-const MediaPage: React.FC = () => {
+const Media: React.FC = () => {
 	const { path = '' } = useParams<{ path: string }>()
 
 	const [isLoaded, setIsLoaded] = useState(false)
@@ -54,25 +41,48 @@ const MediaPage: React.FC = () => {
 		}
 	}, [path, configLoaded])
 
+	const {
+		methods: { getPageInfo }
+	} = useContext(NavigationContext)
+	const PageInfo = getPageInfo(path)
+	const { layers: pageInfoLayers } = PageInfo
+
+	const titles = pageInfoLayers
+		.filter(elem => elem.layerInfo.checked)
+		.map(elem => {
+			const { title } = elem?.itemInfo || {}
+			return title
+		})
+
+	const titlesJSX = (
+		<div className='pageTitlesBlock'>
+			{titles.map((title, index) => (
+				<div className='pageTitleLayer' key={`title-${index}`}>
+					{title}
+				</div>
+			))}
+		</div>
+	)
+
 	const showSpinner = !(isLoaded && playerState?.isReady)
 
 	return (
-		<IonPage>
-			<Header title={path} />
+		<>
 			<IonContent fullscreen>
+				{titlesJSX}
 				{showSpinner && <IonSpinner color='primary' />}
 				<div style={!showSpinner ? {} : { visibility: 'hidden' }}>
-					<Player2 />
+					<PlayerWavesurfer />
 				</div>
 				<pre>{JSON.stringify(playerState, null, 2)}</pre>
 			</IonContent>
 			<IonFooter>
 				<IonToolbar>
-					<PlayerControls />{' '}
+					<PlayerControls />
 				</IonToolbar>
 			</IonFooter>
-		</IonPage>
+		</>
 	)
 }
 
-export default MediaPage
+export default Media

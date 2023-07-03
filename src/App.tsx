@@ -34,6 +34,7 @@ import PhrasesProvider from './components/Phrases/Provider'
 import Main from './pages/Main'
 import ModalProvider from './components/Modals/ModalsProvider'
 import { PlayerProvider } from 'react-wavesurfer-provider'
+import PageFrame from './pages/PageFrame'
 
 setupIonicReact()
 
@@ -48,9 +49,7 @@ const App: React.FC = () => {
 								<Menu />
 								<IonRouterOutlet id='main'>
 									<Route path='/:path+'>
-										<PlayerProvider peaks={[]}>
-											<MediaPage />
-										</PlayerProvider>
+										<PageFrame />
 									</Route>
 									<Route path='/' exact>
 										<Main />

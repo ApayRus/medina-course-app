@@ -3,18 +3,16 @@ import NavigationButtons from '../components/Navigation/NavigationButtons'
 
 interface Props {
 	title?: string
-	titleTr?: string
 }
 
-const Header: React.FC<Props> = ({ title, titleTr }) => {
+const Header: React.FC<Props> = ({ title }) => {
 	return (
 		<>
 			<IonHeader>
 				<IonToolbar>
 					{title && (
 						<IonTitle>
-							<div className='pageTitle'>{title}</div>
-							<div className='pageSubtitle'>{titleTr}</div>
+							<div className='headerTitle'>{title}</div>
 						</IonTitle>
 					)}
 

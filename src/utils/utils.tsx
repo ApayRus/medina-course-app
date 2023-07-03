@@ -7,6 +7,11 @@ import {
 	Page,
 	TableOfContentType
 } from '../components/Navigation/types'
+import {
+	FlatToc,
+	PageInfo,
+	Toc
+} from '../components/Navigation/NavigationProvider'
 
 const getCurrentPageIndex = (
 	flatTableOfContent: FlatTableOfContentType,
@@ -42,6 +47,32 @@ export const getNavItemInfo = (
 ) => {
 	const item = flatToc.find(elem => `/${path}` === elem.path)
 	return item
+}
+
+export const getFlatTocs = (tocs: Toc[]) => {
+	return tocs.map(elem => {
+		const { data } = elem
+		const flatToc = getFlatTableOfContent(data, [])
+		return { ...elem, data: flatToc }
+	})
+}
+
+interface GetPageInfoProps {
+	flatTocs: FlatToc[]
+	path: string
+}
+
+export const getPageInfo = ({ flatTocs, path }: GetPageInfoProps) => {
+	const layers = flatTocs.map(flatToc => {
+		const { info: layerInfo, data } = flatToc
+		const itemInfo = getNavItemInfo(data, path)
+		return { layerInfo, itemInfo }
+	})
+
+	const { type = 'html' } =
+		layers.find(elem => elem.layerInfo.main)?.itemInfo || {}
+
+	return { layers, type } as PageInfo
 }
 
 export const getFlatTableOfContent = (
