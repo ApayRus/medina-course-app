@@ -1,5 +1,5 @@
 import { IonContent, IonFooter, IonSpinner, IonToolbar } from '@ionic/react'
-import { useEffect, useContext, useState } from 'react'
+import { useEffect, useContext } from 'react'
 import { useParams } from 'react-router'
 import { AppStateContext } from '../components/AppStateProvider'
 import { getPhrases } from '../utils/utils'
@@ -7,7 +7,7 @@ import { getContentLayers, getMediaLink } from '../api'
 import { PlayerContext } from 'react-wavesurfer-provider'
 import PlayerWavesurfer from '../components/PlayerWavesurfer'
 import PlayerControls from '../components/PlayerControls'
-import { NavigationContext } from '../components/Navigation/NavigationProvider'
+import PageTitles from '../components/PageTitles'
 
 interface State {
 	contentLayers: string[]
@@ -16,8 +16,6 @@ interface State {
 
 const Media: React.FC = () => {
 	const { path = '' } = useParams<{ path: string }>()
-
-	const [isLoaded, setIsLoaded] = useState(false)
 
 	const {
 		state: { layers, configLoaded }
@@ -28,48 +26,23 @@ const Media: React.FC = () => {
 
 	useEffect(() => {
 		const loadData = async () => {
-			setIsLoaded(false)
 			const mediaLink = await getMediaLink(path)
 			playerMethods.setMediaLink(mediaLink)
 			const contentLayers = await getContentLayers(layers, path)
 			const phrases = getPhrases(contentLayers)
 			playerMethods.updatePhrases({ phrases })
-			setIsLoaded(true)
 		}
 		if (configLoaded) {
 			loadData()
 		}
 	}, [path, configLoaded])
 
-	const {
-		methods: { getPageInfo }
-	} = useContext(NavigationContext)
-	const PageInfo = getPageInfo(path)
-	const { layers: pageInfoLayers } = PageInfo
-
-	const titles = pageInfoLayers
-		.filter(elem => elem.layerInfo.checked)
-		.map(elem => {
-			const { title } = elem?.itemInfo || {}
-			return title
-		})
-
-	const titlesJSX = (
-		<div className='pageTitlesBlock'>
-			{titles.map((title, index) => (
-				<div className='pageTitleLayer' key={`title-${index}`}>
-					{title}
-				</div>
-			))}
-		</div>
-	)
-
-	const showSpinner = !(isLoaded && playerState?.isReady)
+	const showSpinner = !playerState?.isReady
 
 	return (
 		<>
 			<IonContent fullscreen>
-				{titlesJSX}
+				<PageTitles path={path} />
 				{showSpinner && <IonSpinner color='primary' />}
 				<div style={!showSpinner ? {} : { visibility: 'hidden' }}>
 					<PlayerWavesurfer />

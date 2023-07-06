@@ -17,7 +17,7 @@ export default function PageFrame() {
 	const PageInfo = getPageInfo(path)
 	const { type, layers } = PageInfo
 
-	const title = layers.filter(elem => elem.layerInfo.checked)[0].itemInfo.title
+	const title = layers.filter(elem => elem.layerInfo.checked)[0]?.itemInfo.title
 
 	const contentByType = (type: NavItemType) => {
 		switch (type) {
