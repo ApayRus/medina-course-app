@@ -7,7 +7,6 @@ import {
 import { IonReactRouter } from '@ionic/react-router'
 import { Route } from 'react-router-dom'
 import Menu from './components/Navigation/Menu'
-import MediaPage from './pages/Media'
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css'
@@ -30,10 +29,8 @@ import './theme/variables.css'
 
 import NavigationProvider from './components/Navigation/NavigationProvider'
 import AppStateProvider from './components/AppStateProvider'
-import PhrasesProvider from './components/Phrases/Provider'
 import Main from './pages/Main'
 import ModalProvider from './components/Modals/ModalsProvider'
-import { PlayerProvider } from 'react-wavesurfer-provider'
 import PageFrame from './pages/PageFrame'
 
 setupIonicReact()

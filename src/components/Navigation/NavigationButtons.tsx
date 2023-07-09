@@ -9,6 +9,7 @@ import { useLocation } from 'react-router'
 import { getPageNeighbors } from '../../utils/utils'
 import { NavigationContext } from './NavigationProvider'
 import { FlatNavItem } from './types'
+import SettingsButton from '../SettingsButton'
 
 interface State {
 	prevItem: FlatNavItem
@@ -50,6 +51,7 @@ const NavigationButtons = () => {
 					<IonIcon size='large' color='primary' icon={PreviousChapterIcon} />
 				</IonButton>
 			)}
+			<SettingsButton color='primary' />
 			<IonMenuButton color='primary' />
 			{state.nextItem && (
 				<IonButton onClick={goNext}>
