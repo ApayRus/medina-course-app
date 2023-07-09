@@ -1,4 +1,4 @@
-import { parseSubs } from 'frazy-parser'
+import { parseSubs as parseSubsExternal } from 'frazy-parser'
 import { ContentLayer } from '../api'
 import {
 	FlatNavItem,
@@ -12,6 +12,8 @@ import {
 	PageInfo,
 	Toc
 } from '../components/Navigation/NavigationProvider'
+import { Phrase } from 'react-wavesurfer-provider'
+import { RefObject } from 'react'
 
 const getCurrentPageIndex = (
 	flatTableOfContent: FlatTableOfContentType,
@@ -94,12 +96,48 @@ export const getFlatTableOfContent = (
 		.flat()
 }
 
+export function parseSubs(text: string) {
+	if (!text) return []
+	const zeroPhrase = { id: '0', start: 0, end: 0 }
+	const phrases = parseSubsExternal(text, false).map(elem => {
+		const { id, start, end, body: text } = elem
+		return { id, start, end, data: { text } }
+	}) as Phrase[]
+	return [zeroPhrase, ...phrases]
+}
+
 export function getPhrases(contentLayers: ContentLayer[]) {
 	const mainLayer = contentLayers.find(elem => elem.info.main)
 	const phrasesText = mainLayer?.data || ''
-	const phrases = parseSubs(phrasesText, false).map(elem => {
-		const { id, start, end, body: text } = elem
-		return { id, start, end, data: { text } }
-	})
+	const phrases = parseSubs(phrasesText)
 	return phrases
+}
+
+interface ScrollPhrasesProps {
+	phraseRefs: RefObject<HTMLDivElement[]>
+	phrasesContainerRef: RefObject<HTMLIonContentElement>
+	currentPhraseNum: number
+	delta?: number
+}
+
+export const scrollPhrases = ({
+	currentPhraseNum,
+	delta = 0,
+	phraseRefs,
+	phrasesContainerRef
+}: ScrollPhrasesProps) => {
+	if (!phraseRefs.current) {
+		return
+	}
+	if (currentPhraseNum <= 0 || currentPhraseNum >= phraseRefs.current.length) {
+		return
+	}
+	// const { height: videoHeight = 0 } =
+	// 	stickyPlayerContainerRef.current?.getBoundingClientRect() || {}
+	const currentPhraseY = phraseRefs.current[currentPhraseNum].offsetTop
+	phrasesContainerRef?.current?.scrollToPoint(
+		null,
+		currentPhraseY + delta, // - videoHeight
+		1000
+	)
 }
