@@ -8,7 +8,8 @@ interface Props {
 
 const PageTitles = ({ path }: Props) => {
 	const {
-		state: { layers }
+		state: { settings },
+		methods: { getSetting }
 	} = useContext(AppStateContext)
 
 	const {
@@ -19,7 +20,7 @@ const PageTitles = ({ path }: Props) => {
 
 	const titles = pageInfoLayers
 		.filter(
-			elem => layers.find(elem2 => elem2.path === elem.layerInfo.path)?.checked
+			elem => settings.find(elem2 => elem2.path === elem.layerInfo.path)?.value
 		)
 		.map(elem => {
 			const { title } = elem?.itemInfo || {}
@@ -31,14 +32,17 @@ const PageTitles = ({ path }: Props) => {
 		<div className='pageTitleBlock'>
 			{titles.map((elem, index) => {
 				const path = elem.path.replace('toc/', '')
-				const className = path.replace('/', '-')
+				const layerName = path.replace('/', '-')
 				return (
 					<div
-						className={`pageTitleLayer ${className} index-${index}`}
+						className={`pageTitleLayer ${layerName} layer-${index}`}
 						key={`title-${index}`}
 					>
-						<div className={`path ${className}`}>{path}</div>
-						<div className={`title ${className}`}>{elem.title}</div>
+						{getSetting('phrases/showLayerName') && (
+							<div className='path'>{path.replace('layers/', '')}</div>
+						)}
+
+						<div className='title'>{elem.title}</div>
 					</div>
 				)
 			})}

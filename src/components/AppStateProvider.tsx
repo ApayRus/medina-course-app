@@ -1,50 +1,52 @@
 import { IonSpinner } from '@ionic/react'
 import { createContext, useEffect, useState } from 'react'
 import { getConfig } from '../api'
-import { getFlatLayers } from '../functions/config'
+import { getFlatSettings } from '../functions/config'
 
-/* 
-Layers in config file are a tree to visualize checkboxes in nested way 
-Layers in app state is a flat array, to know which layers we should load and in which order to display them
-*/
+export type SettingsItemValue = number | string | boolean
 
-export interface LayerToDisplay {
+export interface SettingsItem {
 	path: string
-	title: string
-	checked?: boolean
+	title: string[]
+	value?: SettingsItemValue
 	main?: boolean
+	options?: string[]
 }
 
-export interface LayerItemInConfig {
+export interface ConfigItem {
 	id: string
 	title: string
-	checked?: boolean
 	main?: boolean
+	value?: SettingsItemValue
+	options?: string[]
 }
 
-export interface LayerFolderInConfig {
+export interface ConfigFolder {
 	id: string
 	title: string
-	content: ConfigLayers
+	content: Array<ConfigItem | ConfigFolder>
 }
 
-export type ConfigLayers = Array<LayerItemInConfig | LayerFolderInConfig>
-
-export interface Config {
-	layers: ConfigLayers
-}
+export type Config = Array<ConfigItem | ConfigFolder>
 
 export interface AppState {
 	loading: boolean
 	configLoaded: boolean
 	tocsLoaded: boolean
-	trLang: string
-	config: Config // all possible languages/layers
-	layers: LayerToDisplay[] // ['en/main', 'ru/main'] // active layers to display
+	config: Config // tree structure and default settings
+	settings: SettingsItem[] // flat config, will be filled with data by user interactions
+	isPageTransition: boolean // to know that page opened automatically, to run auto actions, e.g. playing
+}
+
+interface UpdateSettingsProps {
+	path: string
+	value: SettingsItemValue
 }
 
 interface Methods {
 	update: (newValues: Partial<AppState>) => void
+	updateSettings: ({ path, value }: UpdateSettingsProps) => void
+	getSetting: (path: string) => SettingsItemValue
 }
 
 interface ContextType {
@@ -62,15 +64,17 @@ export const AppStateContext = createContext<ContextType>(defaultContextValue)
 
 const defaultConfig = {} as Config
 
+const defaultState = {
+	loading: true,
+	configLoaded: false,
+	tocsLoaded: false,
+	config: defaultConfig,
+	settings: [],
+	isPageTransition: false
+}
+
 const AppStateProvider: React.FC<Props> = ({ children }) => {
-	const [state, setState] = useState<AppState>({
-		loading: true,
-		configLoaded: false,
-		tocsLoaded: false,
-		trLang: 'ru',
-		config: defaultConfig,
-		layers: []
-	})
+	const [state, setState] = useState<AppState>(defaultState)
 
 	useEffect(() => {
 		const loadConfig = async () => {
@@ -78,22 +82,22 @@ const AppStateProvider: React.FC<Props> = ({ children }) => {
 			scenarios:
 			1) a first open of the app, load default config and put to LS
 			2) non first open, config the same, get state from LS 
-			3) non first open, a new config, load config from Server, update layers "checked" from LS 
+			3) non first open, a new config, load config from Server, update settings "values" from LS 
 			*/
 
 			const configServer = await getConfig()
 
-			let config, layers
+			let config, settings
 
 			const appStateLSString = localStorage.getItem('appState') || `{}`
 			const appStateLS = JSON.parse(appStateLSString) as AppState
-			const { config: configLS, layers: layersLS } = appStateLS
+			const { config: configLS, settings: settingsLS } = appStateLS
 
 			// 1)
 			if (appStateLSString === '{}') {
 				config = configServer
-				layers = getFlatLayers({
-					layers: config.layers,
+				settings = getFlatSettings({
+					settings: config,
 					parentIds: [],
 					parentTitles: []
 				})
@@ -102,25 +106,25 @@ const AppStateProvider: React.FC<Props> = ({ children }) => {
 			// 2)
 			else if (JSON.stringify(configLS) === JSON.stringify(configServer)) {
 				config = configLS
-				layers = layersLS
+				settings = settingsLS
 			}
 
 			// 3)
 			else {
 				config = configServer
-				const layersServer = getFlatLayers({
-					layers: config.layers,
+				const settingsServer = getFlatSettings({
+					settings: config,
 					parentIds: [],
 					parentTitles: []
 				})
-				layers = layersServer.map(layer => {
-					const layerLS = layersLS.find(elem => elem.path === layer.path)
-					const checked = layerLS?.checked || false
-					return { ...layer, checked }
+				settings = settingsServer.map(setting => {
+					const settingLS = settingsLS.find(elem => elem.path === setting.path)
+					const value = settingLS?.value || false
+					return { ...setting, value }
 				})
 			}
 
-			update({ config: configServer, layers, configLoaded: true })
+			update({ config, settings, configLoaded: true })
 		}
 		loadConfig()
 	}, [])
@@ -133,16 +137,28 @@ const AppStateProvider: React.FC<Props> = ({ children }) => {
 	const update = (newValues: Partial<AppState>) => {
 		setState(oldState => {
 			const newState = { ...oldState, ...newValues }
-			if ('layers' in newValues) {
+			if ('settings' in newValues) {
 				localStorage.setItem('appState', JSON.stringify(newState))
 			}
 			return newState
 		})
 	}
 
+	const updateSettings = ({ path, value }: UpdateSettingsProps) => {
+		const { settings } = { ...state }
+		const itemIndex = settings.findIndex(elem => elem.path === path)
+		settings[itemIndex] = { ...settings[itemIndex], value }
+		update({ settings })
+	}
+
+	const getSetting = (path: string) => {
+		const setting = state.settings.find(elem => elem.path === path)!.value!
+		return setting
+	}
+
 	const contextValue: { state: AppState; methods: Methods } = {
 		state,
-		methods: { update }
+		methods: { update, updateSettings, getSetting }
 	}
 
 	const loadingSpinner = (

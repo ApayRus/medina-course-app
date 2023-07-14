@@ -10,11 +10,7 @@ import PlayerControls from '../components/PlayerControls'
 import PageTitles from '../components/PageTitles'
 import { LayersContext } from '../components/Layers/Provider'
 import PhrasesBlock from '../components/PhrasesBlock'
-
-interface State {
-	contentLayers: string[]
-	mediaLink: string
-}
+import { NavigationContext } from '../components/Navigation/NavigationProvider'
 
 const Media: React.FC = () => {
 	const { path = '' } = useParams<{ path: string }>()
@@ -22,8 +18,13 @@ const Media: React.FC = () => {
 	const phrasesContainerRef = useRef<HTMLIonContentElement>(null)
 
 	const {
-		state: { layers, configLoaded }
+		state: { settings, configLoaded, isPageTransition },
+		methods: { getSetting, update: updateAppState }
 	} = useContext(AppStateContext)
+
+	const {
+		methods: { goNext }
+	} = useContext(NavigationContext)
 
 	const {
 		state: { layers: layersWithPhrases },
@@ -37,15 +38,31 @@ const Media: React.FC = () => {
 		const loadData = async () => {
 			const mediaLink = await getMediaLink(path)
 			playerMethods.setMediaLink(mediaLink)
-			const contentLayers = await getContentLayers(layers, path)
+			const contentLayers = await getContentLayers(settings, path)
 			layerMethods.setLayers(contentLayers)
 			const phrases = getPhrases(contentLayers)
 			playerMethods.updatePhrases({ phrases })
 		}
 		if (configLoaded) {
-			loadData()
+			loadData().then(() => {
+				if (playerState.isReady && isPageTransition) {
+					updateAppState({ isPageTransition: false })
+					playerMethods.play()
+				}
+			})
 		}
 	}, [path, configLoaded])
+
+	// auto open new page after playing was finished
+	useEffect(() => {
+		if (playerState.isFinished) {
+			const autoPlay = getSetting(`player/autoPlay`) as boolean
+			if (autoPlay) {
+				updateAppState({ isPageTransition: true })
+				goNext()
+			}
+		}
+	}, [playerState.isFinished])
 
 	const showSpinner = !playerState?.isReady
 
@@ -54,7 +71,10 @@ const Media: React.FC = () => {
 			<IonContent fullscreen ref={phrasesContainerRef}>
 				<PageTitles path={path} />
 				{showSpinner && <IonSpinner color='primary' />}
-				<div style={!showSpinner ? {} : { visibility: 'hidden' }}>
+				<div
+					className='waveformPlayer'
+					style={!showSpinner ? {} : { visibility: 'hidden' }}
+				>
 					<PlayerWavesurfer />
 				</div>
 				<PhrasesBlock phrasesContainerRef={phrasesContainerRef} />

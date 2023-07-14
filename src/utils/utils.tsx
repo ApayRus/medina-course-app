@@ -28,6 +28,7 @@ const getItemByIndex = (
 	index: number
 ) => {
 	const navItem = flatTableOfContent[index]
+
 	return navItem
 }
 
@@ -36,7 +37,6 @@ export const getPageNeighbors = (
 	currentPage: string
 ) => {
 	const pages = flatTableOfContent.filter(elem => elem.type !== 'folder')
-
 	const index = getCurrentPageIndex(pages, currentPage)
 	const prevItem = getItemByIndex(pages, index - 1)
 	const nextItem = getItemByIndex(pages, index + 1)
@@ -116,12 +116,12 @@ export function getPhrases(contentLayers: ContentLayer[]) {
 interface ScrollPhrasesProps {
 	phraseRefs: RefObject<HTMLDivElement[]>
 	phrasesContainerRef: RefObject<HTMLIonContentElement>
-	currentPhraseNum: number
+	phraseIndex: number
 	delta?: number
 }
 
 export const scrollPhrases = ({
-	currentPhraseNum,
+	phraseIndex,
 	delta = 0,
 	phraseRefs,
 	phrasesContainerRef
@@ -129,12 +129,20 @@ export const scrollPhrases = ({
 	if (!phraseRefs.current) {
 		return
 	}
-	if (currentPhraseNum <= 0 || currentPhraseNum >= phraseRefs.current.length) {
+	const phrasesCount = phraseRefs.current.length
+	if (!phrasesCount) {
 		return
+	}
+	let index = phraseIndex
+	if (phraseIndex <= 0) {
+		index = 0
+	}
+	if (phraseIndex >= phrasesCount) {
+		index = phrasesCount - 1
 	}
 	// const { height: videoHeight = 0 } =
 	// 	stickyPlayerContainerRef.current?.getBoundingClientRect() || {}
-	const currentPhraseY = phraseRefs.current[currentPhraseNum].offsetTop
+	const currentPhraseY = phraseRefs.current[index].offsetTop
 	phrasesContainerRef?.current?.scrollToPoint(
 		null,
 		currentPhraseY + delta, // - videoHeight

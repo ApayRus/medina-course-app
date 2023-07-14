@@ -37,11 +37,11 @@ setupIonicReact()
 
 const App: React.FC = () => {
 	return (
-		<AppStateProvider>
-			<NavigationProvider>
-				<ModalProvider>
-					<IonApp>
-						<IonReactRouter>
+		<IonApp>
+			<IonReactRouter>
+				<AppStateProvider>
+					<NavigationProvider>
+						<ModalProvider>
 							<IonSplitPane contentId='main'>
 								<Menu />
 								<IonRouterOutlet id='main'>
@@ -53,11 +53,11 @@ const App: React.FC = () => {
 									</Route>
 								</IonRouterOutlet>
 							</IonSplitPane>
-						</IonReactRouter>
-					</IonApp>
-				</ModalProvider>
-			</NavigationProvider>
-		</AppStateProvider>
+						</ModalProvider>
+					</NavigationProvider>
+				</AppStateProvider>
+			</IonReactRouter>
+		</IonApp>
 	)
 }
 

@@ -30,7 +30,7 @@ const TableOfContentComponent: React.FC<TableOfContentProps> = ({
 	content,
 	tocs,
 	flatTocs,
-	layers,
+	settings,
 	parents,
 	openedFolders
 }) => {
@@ -45,8 +45,8 @@ const TableOfContentComponent: React.FC<TableOfContentProps> = ({
 
 	const { pathname: currentPage } = useLocation()
 
-	const checkedLayerPaths = layers
-		.filter(elem => elem.path.match('toc/') && elem.checked)
+	const valueLayerPaths = settings
+		.filter(elem => elem.path.match('toc/') && elem.value)
 		.map(elem => elem.path)
 
 	return (
@@ -69,7 +69,7 @@ const TableOfContentComponent: React.FC<TableOfContentProps> = ({
 						} = elem
 						const { title = '' } = itemInfo || {}
 						return (
-							checkedLayerPaths.includes(layerPath) && (
+							valueLayerPaths.includes(layerPath) && (
 								<div key={`title-${index}`} className={`title-layer-${index}`}>
 									{title}
 								</div>
@@ -110,7 +110,7 @@ const TableOfContentComponent: React.FC<TableOfContentProps> = ({
 										content={content}
 										tocs={tocs}
 										flatTocs={flatTocs}
-										layers={layers}
+										settings={settings}
 										parents={[...parents, path]}
 										openedFolders={openedFolders}
 									/>

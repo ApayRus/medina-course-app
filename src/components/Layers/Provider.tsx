@@ -1,6 +1,6 @@
 import React, { createContext, useEffect, useState } from 'react'
 import { ContentLayer } from '../../api'
-import { LayerToDisplay } from '../AppStateProvider'
+import { SettingsItem } from '../AppStateProvider'
 import { Phrase } from 'react-wavesurfer-provider'
 import { parseSubs } from '../../utils/utils'
 
@@ -12,12 +12,12 @@ interface Props {
 }
 
 interface Layer {
-	info: LayerToDisplay
+	info: SettingsItem
 	phrases: Phrase[]
 }
 
 interface MixedPhrase {
-	layerInfo: LayerToDisplay
+	layerInfo: SettingsItem
 	phrase: Phrase
 }
 

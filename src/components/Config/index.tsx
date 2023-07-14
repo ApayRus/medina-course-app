@@ -1,21 +1,30 @@
 import CheckboxesTree from './CheckboxesTree'
 import { useContext } from 'react'
-import { AppStateContext } from '../AppStateProvider'
+import { AppStateContext, SettingsItemValue } from '../AppStateProvider'
 import { IonSpinner } from '@ionic/react'
 
 const Config: React.FC = () => {
 	const {
-		state: { layers, config, configLoaded },
-		methods: { update: updateAppState }
+		state: { settings, config, configLoaded },
+		methods: { updateSettings }
 	} = useContext(AppStateContext)
+
+	interface CallbackProps {
+		path: string
+		value: SettingsItemValue
+	}
+
+	const callback = ({ path, value }: CallbackProps) => {
+		updateSettings({ path, value })
+	}
 
 	return (
 		<div>
 			{configLoaded ? (
 				<CheckboxesTree
-					content={config.layers}
-					layers={layers}
-					updateAppState={updateAppState}
+					content={config}
+					settings={settings}
+					callback={callback}
 					parentIds={[]}
 				/>
 			) : (

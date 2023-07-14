@@ -15,7 +15,9 @@ const SettingsButton = (props: Props) => {
 	return (
 		<IonButton
 			{...props}
-			onClick={() => openModal({ contentComponent: 'Config' })}
+			onClick={() =>
+				openModal({ contentComponent: 'Config', title: 'Settings' })
+			}
 		>
 			<IonIcon icon={SettingsIcon}></IonIcon>
 		</IonButton>

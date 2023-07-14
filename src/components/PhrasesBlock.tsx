@@ -4,6 +4,7 @@ import { IonButton, IonIcon } from '@ionic/react'
 import { PlayerContext } from 'react-wavesurfer-provider'
 import { LayersContext } from './Layers/Provider'
 import { scrollPhrases } from '../utils/utils'
+import { AppStateContext } from './AppStateProvider'
 
 interface Props {
 	phrasesContainerRef: React.RefObject<HTMLIonContentElement>
@@ -17,21 +18,25 @@ const PhrasesBlock: React.FC<Props> = ({ phrasesContainerRef }) => {
 	} = useContext(PlayerContext)
 
 	const {
+		methods: { getSetting }
+	} = useContext(AppStateContext)
+
+	const {
 		methods: { mixPhrases }
 	} = useContext(LayersContext)
 
 	const phraseRefs = useRef<HTMLDivElement[]>([])
 
 	useEffect(() => {
-		if (playMode === 'phrase') {
-			return
+		const autoScroll = getSetting('phrases/autoScroll')
+		if (playMode !== 'phrase' && autoScroll) {
+			scrollPhrases({
+				phraseIndex: currentPhraseNum - 2,
+				// delta: screenHeight / 2,
+				phraseRefs,
+				phrasesContainerRef
+			})
 		}
-		scrollPhrases({
-			currentPhraseNum: currentPhraseNum - 2,
-			// delta: screenHeight / 2,
-			phraseRefs,
-			phrasesContainerRef
-		})
 	}, [currentPhraseNum])
 
 	return (
@@ -56,17 +61,24 @@ const PhrasesBlock: React.FC<Props> = ({ phrasesContainerRef }) => {
 								const { phrase, layerInfo } = phraseLayer
 								const { path: layerPath } = layerInfo
 								const path = layerPath.replace('content/', '')
-								const className = path.replace(/\//g, '-')
+								const layerName = path.replace(/\//g, '-')
+								const showLayer = getSetting(layerPath) as boolean
 
 								const { text } = phrase?.data || {}
-								return (
+								return showLayer ? (
 									<div
-										className={`phraseLayer ${className} layer-${layerIndex}`}
+										className={`phraseLayer ${layerName} layer-${layerIndex}`}
 										key={`layer-${layerIndex}`}
 									>
-										<div className={`path`}>[{path}]</div>
+										{getSetting('phrases/showLayerName') && (
+											<div className={`path`}>
+												{path.replace('layers/', '')}
+											</div>
+										)}
 										<div className={`text`}>{text}</div>
 									</div>
+								) : (
+									<></>
 								)
 							})}
 

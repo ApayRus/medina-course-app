@@ -22,11 +22,13 @@ interface ContextType {
 interface State {
 	isOpen: boolean
 	contentComponent: 'Config'
+	title?: string
 	// props?: any
 }
 
 interface OpenModalParams {
 	contentComponent: 'Config'
+	title?: string
 	// props?: any
 }
 
@@ -61,7 +63,7 @@ const ModalProvider: React.FC<Props> = ({ children }) => {
 		>
 			<IonHeader>
 				<IonToolbar>
-					<IonTitle>Modal</IonTitle>
+					<IonTitle>{state.title}</IonTitle>
 					<IonButtons slot='end'>
 						<IonButton
 							onClick={() =>

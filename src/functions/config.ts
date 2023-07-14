@@ -1,7 +1,7 @@
-import { ConfigLayers, LayerToDisplay } from '../components/AppStateProvider'
+import { Config, SettingsItem } from '../components/AppStateProvider'
 
 interface Props {
-	layers: ConfigLayers
+	settings: Config
 	parentIds: string[]
 	parentTitles: string[]
 }
@@ -10,26 +10,30 @@ interface Props {
  *
  * returns flat layers from config as  ['en/main', 'en/notes', 'ru/main', 'ru/transcription']
  */
-export const getFlatLayers = ({ layers, parentIds, parentTitles }: Props) => {
+export const getFlatSettings = ({
+	settings,
+	parentIds,
+	parentTitles
+}: Props) => {
 	// @ts-ignore
-	return layers.reduce((acc, item) => {
+	return settings.reduce((acc, item) => {
 		if ('content' in item) {
 			const { id, title, content } = item
-			const newItem = getFlatLayers({
-				layers: content,
+			const newItem = getFlatSettings({
+				settings: content,
 				parentIds: [...parentIds, id],
 				parentTitles: [...parentTitles, title]
-			}) as LayerToDisplay[]
+			}) as SettingsItem[]
 			return [...acc, ...newItem]
 		} else {
-			const { id, title, main, checked } = item
+			const { id, title, main, value } = item
 			const newItem = {
-				title: [...parentTitles, title].join(', '),
+				title: [...parentTitles, title],
 				path: [...parentIds, id].join('/'),
 				main,
-				checked
+				value
 			}
 			return [...acc, newItem]
 		}
-	}, []) as LayerToDisplay[]
+	}, []) as SettingsItem[]
 }

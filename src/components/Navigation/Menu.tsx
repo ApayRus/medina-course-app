@@ -12,7 +12,7 @@ const Menu: React.FC = () => {
 	} = useContext(NavigationContext)
 
 	const {
-		state: { layers }
+		state: { settings }
 	} = useContext(AppStateContext)
 
 	const content = tocs?.[0]?.data
@@ -22,7 +22,7 @@ const Menu: React.FC = () => {
 			<IonContent>
 				{content ? (
 					<TableOfContent
-						{...{ content, flatTocs, tocs, layers }}
+						{...{ content, flatTocs, tocs, settings }}
 						parents={[]}
 						openedFolders={['book1']}
 					/>
