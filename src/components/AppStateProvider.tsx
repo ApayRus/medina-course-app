@@ -2,6 +2,7 @@ import { IonSpinner } from '@ionic/react'
 import { createContext, useEffect, useState } from 'react'
 import { getConfig } from '../api'
 import { getFlatSettings } from '../functions/config'
+import { DelayMeasure } from 'react-wavesurfer-provider'
 
 export type SettingsItemValue = number | string | boolean
 
@@ -43,10 +44,17 @@ interface UpdateSettingsProps {
 	value: SettingsItemValue
 }
 
+interface DictationSettings {
+	repeatCount: number
+	repeatDelay: number
+	delayMeasure: DelayMeasure
+}
+
 interface Methods {
 	update: (newValues: Partial<AppState>) => void
 	updateSettings: ({ path, value }: UpdateSettingsProps) => void
 	getSetting: (path: string) => SettingsItemValue
+	getDictationSettings: () => DictationSettings
 }
 
 interface ContextType {
@@ -156,9 +164,16 @@ const AppStateProvider: React.FC<Props> = ({ children }) => {
 		return setting
 	}
 
+	const getDictationSettings = () => {
+		const repeatCount = getSetting(`player/repeatCount`) as number
+		const repeatDelay = getSetting(`player/repeatDelay`) as number
+		const delayMeasure = getSetting(`player/delayMeasure`) as DelayMeasure
+		return { repeatCount, repeatDelay, delayMeasure }
+	}
+
 	const contextValue: { state: AppState; methods: Methods } = {
 		state,
-		methods: { update, updateSettings, getSetting }
+		methods: { update, updateSettings, getSetting, getDictationSettings }
 	}
 
 	const loadingSpinner = (

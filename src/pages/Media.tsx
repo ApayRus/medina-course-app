@@ -19,17 +19,14 @@ const Media: React.FC = () => {
 
 	const {
 		state: { settings, configLoaded, isPageTransition },
-		methods: { getSetting, update: updateAppState }
+		methods: { getSetting, update: updateAppState, getDictationSettings }
 	} = useContext(AppStateContext)
 
 	const {
 		methods: { goNext }
 	} = useContext(NavigationContext)
 
-	const {
-		state: { layers: layersWithPhrases },
-		methods: layerMethods
-	} = useContext(LayersContext)
+	const { methods: layerMethods } = useContext(LayersContext)
 
 	const { state: playerState, methods: playerMethods } =
 		useContext(PlayerContext)
@@ -47,7 +44,12 @@ const Media: React.FC = () => {
 			loadData().then(() => {
 				if (playerState.isReady && isPageTransition) {
 					updateAppState({ isPageTransition: false })
-					playerMethods.play()
+					const dictationMode = getSetting(`player/dictationMode`) as boolean
+					if (dictationMode) {
+						playerMethods.playDictation(getDictationSettings()) // TODO -  doesn't work/play
+					} else {
+						playerMethods.play()
+					}
 				}
 			})
 		}

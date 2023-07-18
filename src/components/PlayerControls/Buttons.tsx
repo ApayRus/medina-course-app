@@ -7,18 +7,34 @@ import {
 } from 'ionicons/icons'
 import { useContext } from 'react'
 import { PlayerContext } from 'react-wavesurfer-provider'
+import { AppStateContext } from '../AppStateProvider'
 
 const PlayerButtons = () => {
 	const {
 		state: { isPlaying, currentTime },
-		methods
+		methods: playerMethods
 	} = useContext(PlayerContext)
 
+	const {
+		methods: { getSetting, getDictationSettings }
+	} = useContext(AppStateContext)
+
+	const dictationMode = getSetting(`player/dictationMode`) as boolean
+
 	const minus5 = () => {
-		methods.setCurrentTime(currentTime - 5)
+		playerMethods.setCurrentTime(currentTime - 5)
 	}
 	const plus5 = () => {
-		methods.setCurrentTime(currentTime + 5)
+		playerMethods.setCurrentTime(currentTime + 5)
+	}
+
+	const play = () => {
+		if (dictationMode) {
+			const dictationSettings = getDictationSettings()
+			playerMethods.playDictation(dictationSettings)
+		} else {
+			playerMethods.play()
+		}
 	}
 
 	return (
@@ -27,11 +43,11 @@ const PlayerButtons = () => {
 				<IonIcon icon={PlayBackIcon}></IonIcon>
 			</IonButton>
 			{isPlaying ? (
-				<IonButton size='small' onClick={methods.pause} fill='clear'>
+				<IonButton size='small' onClick={playerMethods.pause} fill='clear'>
 					<IonIcon icon={PauseIcon}></IonIcon>
 				</IonButton>
 			) : (
-				<IonButton size='small' onClick={methods.play} fill='clear'>
+				<IonButton size='small' onClick={play} fill='clear'>
 					<IonIcon icon={PlayIcon}></IonIcon>
 				</IonButton>
 			)}
