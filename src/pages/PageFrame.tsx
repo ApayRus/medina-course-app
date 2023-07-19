@@ -18,7 +18,11 @@ export default function PageFrame() {
 	const PageInfo = getPageInfo(path)
 	const { type, layers } = PageInfo
 
-	const title = layers.filter(elem => elem.layerInfo.value)[0]?.itemInfo.title
+	const firstLayer = layers.filter(elem => elem.layerInfo.value)[0] // first checked layer
+	const title = firstLayer?.itemInfo?.title
+	const layerName = firstLayer?.layerInfo?.path
+		.replace('layers/toc/', '')
+		.replace('/', '-')
 
 	const contentByType = (type: NavItemType) => {
 		switch (type) {
@@ -38,7 +42,7 @@ export default function PageFrame() {
 
 	return (
 		<IonPage>
-			<Header title={title} />
+			<Header {...{ title, layerName }} />
 			{contentByType(type)}
 		</IonPage>
 	)

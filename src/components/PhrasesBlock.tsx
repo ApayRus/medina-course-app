@@ -60,7 +60,7 @@ const PhrasesBlock: React.FC<Props> = ({ phrasesContainerRef }) => {
 							{phraseBlock.map((phraseLayer, layerIndex) => {
 								const { phrase, layerInfo } = phraseLayer
 								const { path: layerPath } = layerInfo
-								const path = layerPath.replace('content/', '')
+								const path = layerPath.replace('layers/content/', '')
 								const layerName = path.replace(/\//g, '-')
 								const showLayer = getSetting(layerPath) as boolean
 

@@ -3,16 +3,17 @@ import NavigationButtons from '../components/Navigation/NavigationButtons'
 
 interface Props {
 	title?: string
+	layerName?: string
 }
 
-const Header: React.FC<Props> = ({ title }) => {
+const Header: React.FC<Props> = ({ title, layerName }) => {
 	return (
 		<>
 			<IonHeader>
 				<IonToolbar>
 					{title && (
 						<IonTitle>
-							<div className='headerTitle'>{title}</div>
+							<div className={`pageHeaderTitle ${layerName}`}>{title}</div>
 						</IonTitle>
 					)}
 

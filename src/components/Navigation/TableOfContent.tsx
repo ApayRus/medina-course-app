@@ -67,10 +67,17 @@ const TableOfContentComponent: React.FC<TableOfContentProps> = ({
 						const {
 							layerInfo: { path: layerPath }
 						} = elem
+						const layerName = layerPath
+							.replace('layers/toc/', '')
+							.replace(/\//g, '-')
+
 						const { title = '' } = itemInfo || {}
 						return (
 							valueLayerPaths.includes(layerPath) && (
-								<div key={`title-${index}`} className={`title-layer-${index}`}>
+								<div
+									key={`title-${index}`}
+									className={`tocLayer layer-${index} ${layerName}`}
+								>
 									{title}
 								</div>
 							)
@@ -85,14 +92,16 @@ const TableOfContentComponent: React.FC<TableOfContentProps> = ({
 								<IonItem
 									routerLink={'/' + path}
 									color={isActive ? 'secondary' : ''}
-									className={isActive ? 'activeMenuItem' : ''}
+									className={`tocItem depth-${parents.length} ${
+										isActive ? 'activeMenuItem' : ''
+									}`}
 								>
 									<IonIcon
 										slot='start'
 										md={getIcon(item)}
 										style={{ color: isActive ? 'white' : '' }}
 									/>
-									<IonLabel className='ion-text-wrap'>{titlesJSX}</IonLabel>
+									<IonLabel className={`ion-text-wrap`}>{titlesJSX}</IonLabel>
 								</IonItem>
 							</IonMenuToggle>
 						)
@@ -101,9 +110,13 @@ const TableOfContentComponent: React.FC<TableOfContentProps> = ({
 						const { content } = item
 						return (
 							<IonAccordion key={path} value={path}>
-								<IonItem slot='header' color='light'>
+								<IonItem
+									slot='header'
+									color='light'
+									className={`tocFolder depth-${parents.length}`}
+								>
 									<IonIcon slot='start' md={getIcon(item)} />
-									<IonLabel className='ion-text-wrap'>{titlesJSX}</IonLabel>
+									<IonLabel className={`ion-text-wrap`}>{titlesJSX}</IonLabel>
 								</IonItem>
 								<div className='ion-padding' slot='content'>
 									<TableOfContentComponent

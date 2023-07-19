@@ -13,17 +13,11 @@
 	line-height: 1.2 !important;
 }
 
-.menuSubItem {
-	margin-top: 5px;
-	color: gray;
-	font-size: small;
+.tocFolder.depth-0 .tocLayer.layer-0 {
+	font-size: 1.3rem;
 }
 
 .activeMenuItem {
-}
-
-.activeMenuItem .menuSubItem {
-	color: white;
 }
 
 /* PHRASES */
