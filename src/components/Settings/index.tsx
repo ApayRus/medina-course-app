@@ -1,4 +1,4 @@
-import CheckboxesTree from './CheckboxesTree'
+import CheckboxesTree from './SettingsTree'
 import { useContext } from 'react'
 import { AppStateContext, SettingsItemValue } from '../AppStateProvider'
 import { IonSpinner } from '@ionic/react'

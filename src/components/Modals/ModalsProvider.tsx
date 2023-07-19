@@ -8,7 +8,7 @@ import {
 	IonContent
 } from '@ionic/react'
 import { createContext, useState } from 'react'
-import Config from '../Config'
+import Config from '../Settings'
 
 interface Props {
 	children: JSX.Element | JSX.Element[]
