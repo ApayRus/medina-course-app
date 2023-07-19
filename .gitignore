@@ -29,8 +29,6 @@ yarn-error.log*
 .eslintcache
 
 # my 
-/public/assets/audios
-*.env 
 
 /src/firebase/config.ts
 

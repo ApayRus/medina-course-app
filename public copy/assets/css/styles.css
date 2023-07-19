@@ -1,0 +1,175 @@
+/* NAVIGATION */
+
+.pageTitle {
+}
+
+.pageSubtitle {
+	font-size: small;
+	color: grey;
+}
+
+.toc ion-label {
+	font-size: 0.85rem !important;
+	line-height: 1.2 !important;
+}
+
+.menuSubItem {
+	margin-top: 5px;
+	color: gray;
+	font-size: small;
+}
+
+.activeMenuItem {
+}
+
+.activeMenuItem .menuSubItem {
+	color: white;
+}
+
+/* PHRASES */
+
+.phrasesBlock {
+	/* max-width: 400px; */
+}
+
+.phraseBlock {
+	padding: 5px;
+
+	margin-inline: 5px;
+	/* border: 1px solid rgba(255, 255, 255, 1); */
+	border-radius: 10px;
+}
+
+.phraseLayer.layer-0 {
+	font-size: 1rem;
+}
+
+.phraseLayer.layer-1 {
+	color: grey;
+	font-size: 14px;
+	padding-top: 5px;
+	/* text-align: right; */
+}
+
+.phraseBlock .phraseNum {
+	font-size: 8px;
+	color: grey;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
+}
+
+/* .phraseWrapper:nth-child(1) {
+	display: none;
+} */
+
+.phraseBlock.active .layer-1,
+.phraseBlock.active .phraseNum {
+	/* color: lightgray; */
+}
+
+.phraseBlock ion-button {
+	height: unset;
+	font-size: unset;
+	color: unset;
+	margin: unset;
+	z-index: 0;
+}
+
+.phraseBlock.active {
+	position: relative;
+}
+.phraseBlock.active:before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: -1;
+	background: rgba(var(--ion-color-primary-rgb), 0.3);
+	filter: blur(10px);
+}
+
+.pageTitleBlock {
+	text-align: center;
+	padding: 0.5rem;
+}
+
+.pageTitleLayer {
+	margin-bottom: 0.5rem;
+}
+
+.pageTitleLayer .path {
+	font-size: small;
+	color: grey;
+	display: inline-block;
+	/* margin-left: 0.5rem; */
+}
+
+.pageTitleLayer .title {
+	display: inline-block;
+	margin-left: 0.5rem;
+}
+
+.pageTitleLayer.layer-1 {
+	color: grey;
+	font-size: 14px;
+}
+
+.phraseLayer .path {
+	font-size: small;
+	color: grey;
+	display: inline-block;
+	margin-right: 0.5rem;
+}
+
+.phraseLayer .text {
+	display: inline-block;
+	/* margin-left: 0.5rem; */
+}
+
+.phrase-0 {
+	display: none;
+}
+
+/* .pageTitleLayer.index-1 {
+	margin-left: 0.5rem;
+}
+
+.pageTitleLayer.index-2 {
+	margin-left: 1rem;
+} */
+
+.settingsTree {
+	/* border: 1px solid lightgray; */
+}
+
+.settingsTree .level-1 {
+	margin-top: 10px;
+}
+
+.settingsTree .level-2,
+.settingsTree .level-3,
+.settingsTree .level-4,
+.settingsTree .level-5 {
+	margin-left: 15px;
+	margin-top: 10px;
+}
+
+.settingsHeader {
+	/* font-weight: bold; */
+	color: var(--ion-color-primary);
+}
+
+.settingsLabel {
+	display: inline-block;
+	/* color: var(--ion-color-medium); */
+}
+
+.waveformPlayer {
+	position: sticky;
+	top: 5px;
+	background-color: white;
+	z-index: 1;
+}
