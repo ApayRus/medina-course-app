@@ -14,17 +14,24 @@ export interface SettingsItem {
 	options?: string[]
 }
 
+export interface SelectOption {
+	id: string
+	title: string
+}
+
 export interface ConfigItem {
 	id: string
 	title: string
+	description?: string
 	main?: boolean
 	value?: SettingsItemValue
-	options?: string[]
+	options?: SelectOption[]
 }
 
 export interface ConfigFolder {
 	id: string
 	title: string
+	description?: string
 	content: Array<ConfigItem | ConfigFolder>
 }
 

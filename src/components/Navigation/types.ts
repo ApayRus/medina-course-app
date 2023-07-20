@@ -1,4 +1,4 @@
-import { SettingsItem } from '../AppStateProvider'
+import { SettingsItem, SettingsItemValue } from '../AppStateProvider'
 import { FlatToc, Toc } from './NavigationProvider'
 
 export type NavItemType = 'folder' | 'html' | 'richMedia'
@@ -39,6 +39,7 @@ export interface TableOfContentProps {
 	parents: string[]
 	openedFolders: string[]
 	settings: SettingsItem[]
+	getSetting: (path: string) => SettingsItemValue
 }
 
 export interface FlatNavItem {

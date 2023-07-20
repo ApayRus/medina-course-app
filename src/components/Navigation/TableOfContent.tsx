@@ -31,6 +31,7 @@ const TableOfContentComponent: React.FC<TableOfContentProps> = ({
 	tocs,
 	flatTocs,
 	settings,
+	getSetting,
 	parents,
 	openedFolders
 }) => {
@@ -48,6 +49,8 @@ const TableOfContentComponent: React.FC<TableOfContentProps> = ({
 	const valueLayerPaths = settings
 		.filter(elem => elem.path.match('toc/') && elem.value)
 		.map(elem => elem.path)
+
+	const showLayerName = getSetting('phrases/showLayerName')
 
 	return (
 		<div className='toc'>
@@ -78,7 +81,10 @@ const TableOfContentComponent: React.FC<TableOfContentProps> = ({
 									key={`title-${index}`}
 									className={`tocLayer layer-${index} ${layerName}`}
 								>
-									{title}
+									{showLayerName && (
+										<div className='layerName'>{layerName}</div>
+									)}
+									<div className='text'>{title}</div>
 								</div>
 							)
 						)
@@ -92,7 +98,7 @@ const TableOfContentComponent: React.FC<TableOfContentProps> = ({
 								<IonItem
 									routerLink={'/' + path}
 									color={isActive ? 'secondary' : ''}
-									className={`tocItem depth-${parents.length} ${
+									className={`tocItem level-${parents.length} ${
 										isActive ? 'activeMenuItem' : ''
 									}`}
 								>
@@ -113,19 +119,22 @@ const TableOfContentComponent: React.FC<TableOfContentProps> = ({
 								<IonItem
 									slot='header'
 									color='light'
-									className={`tocFolder depth-${parents.length}`}
+									className={`tocFolder level-${parents.length}`}
 								>
 									<IonIcon slot='start' md={getIcon(item)} />
 									<IonLabel className={`ion-text-wrap`}>{titlesJSX}</IonLabel>
 								</IonItem>
 								<div className='ion-padding' slot='content'>
 									<TableOfContentComponent
-										content={content}
-										tocs={tocs}
-										flatTocs={flatTocs}
-										settings={settings}
-										parents={[...parents, path]}
-										openedFolders={openedFolders}
+										{...{
+											content,
+											tocs,
+											flatTocs,
+											settings,
+											getSetting,
+											openedFolders,
+											parents: [...parents, path]
+										}}
 									/>
 								</div>
 							</IonAccordion>

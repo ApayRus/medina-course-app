@@ -42,7 +42,7 @@ const App: React.FC = () => {
 				<AppStateProvider>
 					<NavigationProvider>
 						<ModalProvider>
-							<IonSplitPane contentId='main'>
+							<IonSplitPane when='sm' contentId='main'>
 								<Menu />
 								<IonRouterOutlet id='main'>
 									<Route path='/:path+'>

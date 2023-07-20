@@ -6,7 +6,7 @@ import {
 	IonSelectOption,
 	IonText
 } from '@ionic/react'
-import { Config, SettingsItem } from '../AppStateProvider'
+import { Config, SelectOption, SettingsItem } from '../AppStateProvider'
 
 interface Props {
 	content: Config
@@ -24,7 +24,7 @@ const CheckboxesTree: React.FC<Props> = ({
 	return (
 		<div className='settingsTree'>
 			{content.map(elem => {
-				const { id, title } = elem
+				const { id, title, description } = elem
 				const path = [...parentIds, elem.id].join('/')
 				const level = parentIds.length + 1
 				if ('content' in elem) {
@@ -33,7 +33,10 @@ const CheckboxesTree: React.FC<Props> = ({
 					return (
 						<div key={`${path}`} className={`level-${level}`}>
 							<IonText>
-								<div className={`settingsHeader level-${level}`}>{title}</div>
+								<div className={`settingsHeader level-${level}`}>
+									<div className='title'>{title}</div>
+									<div className='description'>{description}</div>
+								</div>
 							</IonText>
 							<CheckboxesTree
 								content={content}
@@ -48,10 +51,16 @@ const CheckboxesTree: React.FC<Props> = ({
 					const { options = [] } = elem
 					const inputElement = () => {
 						if (typeof value === 'number') {
-							return <NumberInput {...{ path, title, value, callback }} />
+							return (
+								<NumberInput
+									{...{ path, title, description, value, callback }}
+								/>
+							)
 						} else if (options.length > 0 && typeof value === 'string') {
 							return (
-								<SelectInput {...{ path, title, value, options, callback }} />
+								<SelectInput
+									{...{ path, title, description, value, options, callback }}
+								/>
 							)
 						} else if (
 							typeof value === 'boolean' ||
@@ -59,7 +68,13 @@ const CheckboxesTree: React.FC<Props> = ({
 						) {
 							return (
 								<CheckboxInput
-									{...{ path, title, value: Boolean(value), callback }}
+									{...{
+										path,
+										title,
+										description,
+										value: Boolean(value),
+										callback
+									}}
 								/>
 							)
 						}
@@ -76,6 +91,7 @@ export default CheckboxesTree
 interface InputProps {
 	path: string
 	title: string
+	description?: string
 	callback: (event: any) => void
 }
 
@@ -85,7 +101,7 @@ interface InputNumberProps extends InputProps {
 
 interface InputSelectProps extends InputProps {
 	value: string
-	options: string[]
+	options: SelectOption[]
 }
 
 interface InputCheckboxProps extends InputProps {
@@ -95,6 +111,7 @@ interface InputCheckboxProps extends InputProps {
 const NumberInput: React.FC<InputNumberProps> = ({
 	path,
 	title,
+	description,
 	value,
 	callback
 }) => {
@@ -109,7 +126,10 @@ const NumberInput: React.FC<InputNumberProps> = ({
 	}
 	return (
 		<>
-			<div className={`settingsLabel level-${level}`}>{title}</div>
+			<div className={`settingsLabel level-${level}`}>
+				<div className='title'>{title}</div>
+				<div className='description'>{description}</div>
+			</div>
 			<IonInput
 				id={path}
 				type='number'
@@ -128,6 +148,7 @@ const SelectInput: React.FC<InputSelectProps> = ({
 	path,
 	title,
 	value,
+	description,
 	options,
 	callback
 }) => {
@@ -144,25 +165,29 @@ const SelectInput: React.FC<InputSelectProps> = ({
 
 	return (
 		<>
-			<div className={`settingsLabel level-${level}`}>{title}</div>
+			<div className={`settingsLabel level-${level}`}>
+				<div className='title'>{title}</div>
+				<div className='description'>{description}</div>
+			</div>
 			<IonSelect
 				id={path}
 				interface='popover'
 				placeholder={id}
 				onIonChange={onChange({ path, value })}
 				value={value}
-				defaultValue={options[0]}
+				defaultValue={options[0]['id']}
 				slot='end'
 				aria-label={title}
 			>
 				{options.map((option, index) => {
+					const { id, title } = option
 					return (
 						<IonSelectOption
-							aria-label={option}
+							aria-label={title}
 							key={`option-${index}`}
-							value={option}
+							value={id}
 						>
-							{option}
+							{title}
 						</IonSelectOption>
 					)
 				})}
@@ -174,6 +199,7 @@ const SelectInput: React.FC<InputSelectProps> = ({
 const CheckboxInput: React.FC<InputCheckboxProps> = ({
 	path,
 	title,
+	description,
 	value,
 	callback
 }) => {
@@ -187,7 +213,10 @@ const CheckboxInput: React.FC<InputCheckboxProps> = ({
 	const level = pathArray.length
 	return (
 		<>
-			<div className={`settingsLabel level-${level}`}>{title}</div>
+			<div className={`settingsLabel level-${level}`}>
+				<div className='title'>{title}</div>
+				<div className='description'>{description}</div>
+			</div>
 			<IonCheckbox
 				id={path}
 				slot='end'

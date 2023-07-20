@@ -39,6 +39,8 @@ const PhrasesBlock: React.FC<Props> = ({ phrasesContainerRef }) => {
 		}
 	}, [currentPhraseNum])
 
+	const showLayerName = getSetting('phrases/showLayerName')
+
 	return (
 		<div className='phrasesBlock'>
 			{mixPhrases()?.map((phraseBlock, phraseIndex) => {
@@ -60,8 +62,9 @@ const PhrasesBlock: React.FC<Props> = ({ phrasesContainerRef }) => {
 							{phraseBlock.map((phraseLayer, layerIndex) => {
 								const { phrase, layerInfo } = phraseLayer
 								const { path: layerPath } = layerInfo
-								const path = layerPath.replace('layers/content/', '')
-								const layerName = path.replace(/\//g, '-')
+								const layerName = layerPath
+									.replace('layers/content/', '')
+									.replace(/\//g, '-')
 								const showLayer = getSetting(layerPath) as boolean
 
 								const { text } = phrase?.data || {}
@@ -70,10 +73,8 @@ const PhrasesBlock: React.FC<Props> = ({ phrasesContainerRef }) => {
 										className={`phraseLayer ${layerName} layer-${layerIndex}`}
 										key={`layer-${layerIndex}`}
 									>
-										{getSetting('phrases/showLayerName') && (
-											<div className={`path`}>
-												{path.replace('layers/', '')}
-											</div>
+										{showLayerName && (
+											<div className={`layerName`}>{layerName}</div>
 										)}
 										<div className={`text`}>{text}</div>
 									</div>

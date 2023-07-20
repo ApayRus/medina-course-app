@@ -28,6 +28,8 @@ const PageTitles = ({ path }: Props) => {
 			return { title, path }
 		})
 
+	const showLayerName = getSetting('phrases/showLayerName')
+
 	return (
 		<div className='pageTitleBlock'>
 			{titles.map((elem, index) => {
@@ -37,11 +39,9 @@ const PageTitles = ({ path }: Props) => {
 						className={`pageTitleLayer ${layerName} layer-${index}`}
 						key={`title-${index}`}
 					>
-						{getSetting('phrases/showLayerName') && (
-							<div className='path'>{layerName}</div>
-						)}
+						{showLayerName && <div className='layerName'>{layerName}</div>}
 
-						<div className='title'>{elem.title}</div>
+						<div className='text'>{elem.title}</div>
 					</div>
 				)
 			})}

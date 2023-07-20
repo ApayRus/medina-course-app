@@ -17,7 +17,8 @@
 	font-size: 1.3rem;
 }
 
-.activeMenuItem {
+.activeMenuItem .layer-1 .text {
+	color: white;
 }
 
 /* PHRASES */
@@ -39,10 +40,7 @@
 }
 
 .phraseLayer.layer-1 {
-	color: grey;
-	font-size: 14px;
 	padding-top: 5px;
-	/* text-align: right; */
 }
 
 .phraseBlock .phraseNum {
@@ -94,28 +92,25 @@
 	margin-bottom: 0.5rem;
 }
 
+.pageTitleLayer.layer-1,
+.tocLayer.layer-1,
+.phraseLayer.layer-1 {
+	color: grey;
+	font-size: 0.8rem;
+}
+
+.layerName {
+	font-size: small;
+	color: grey;
+	display: inline-block;
+	margin-right: 0.5rem;
+}
+
 .pageTitleLayer .path {
 	font-size: small;
 	color: grey;
 	display: inline-block;
 	/* margin-left: 0.5rem; */
-}
-
-.pageTitleLayer .title {
-	display: inline-block;
-	margin-left: 0.5rem;
-}
-
-.pageTitleLayer.layer-1 {
-	color: grey;
-	font-size: 14px;
-}
-
-.phraseLayer .path {
-	font-size: small;
-	color: grey;
-	display: inline-block;
-	margin-right: 0.5rem;
 }
 
 .phraseLayer .text {
@@ -167,3 +162,15 @@
 	background-color: white;
 	z-index: 1;
 }
+
+.tocLayer,
+.pageTitleLayer,
+.phraseLayer {
+	display: flex;
+	align-items: center;
+}
+
+.pageTitleLayer {
+	justify-content: center;
+}
+
