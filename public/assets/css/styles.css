@@ -191,5 +191,6 @@
 	margin-right: 0.5rem;
 }
 
-
-
+.settingsNumberInput {
+	max-width: 3.5rem;
+}
