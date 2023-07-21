@@ -202,7 +202,8 @@
 	src: url('/assets/fonts/ScheherazadeNew-Regular.ttf');
 }
 
-.ar .text {
+.ar .text,
+.pageHeaderTitle.ar {
 	font-family: Scheherazade;
 	font-size: 1.2rem;
 }
