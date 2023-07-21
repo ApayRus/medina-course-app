@@ -174,3 +174,54 @@
 	justify-content: center;
 }
 
+.settingsLabel div,
+.settingsHeader div {
+	/* div is .title or .description */
+	display: inline-block;
+}
+
+.settingsLabel .description,
+.settingsHeader .description {
+	color: gray;
+	font-size: small;
+}
+
+.settingsLabel .title,
+.settingsHeader .title {
+	margin-right: 0.5rem;
+}
+
+/* MY STYLES  */
+
+@font-face {
+	font-family: 'Scheherazade';
+	src: url('/assets/fonts/ScheherazadeNew-Regular.ttf');
+}
+
+.ar .text {
+	font-family: Scheherazade;
+	font-size: 1.2rem;
+}
+
+.phraseLayer {
+	flex-direction: row-reverse;
+}
+
+.phraseLayer.ar {
+	direction: rtl;
+	flex-direction: row;
+}
+
+/* because of rtl */
+.phraseLayer .layerName {
+	margin-right: 0;
+	margin-left: 0.5rem;
+}
+
+.phraseBlock .phraseNum {
+	flex-direction: row-reverse;
+}
+
+.pageTitleLayer {
+	margin-bottom: unset;
+}

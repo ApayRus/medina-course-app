@@ -1,6 +1,6 @@
 [
  {
-  "origin": ["http://localhost:3000", "http://localhost:1234", "http://localhost:5000"],
+  "origin": ["http://localhost:3000", "http://localhost:1234", "http://localhost:5000", "https://medina-course.web.app"],
   "method": ["GET"],
   "maxAgeSeconds": 3600
  }
