@@ -174,3 +174,22 @@
 	justify-content: center;
 }
 
+.settingsLabel div,
+.settingsHeader div {
+	/* div is .title or .description */
+	display: inline-block;
+}
+
+.settingsLabel .description,
+.settingsHeader .description {
+	color: gray;
+	font-size: small;
+}
+
+.settingsLabel .title,
+.settingsHeader .title {
+	margin-right: 0.5rem;
+}
+
+
+

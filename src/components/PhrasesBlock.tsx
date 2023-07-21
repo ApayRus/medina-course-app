@@ -65,8 +65,7 @@ const PhrasesBlock: React.FC<Props> = ({ phrasesContainerRef }) => {
 								const layerName = layerPath
 									.replace('layers/content/', '')
 									.replace(/\//g, '-')
-								const showLayer = getSetting(layerPath) as boolean
-
+								const showLayer = getSetting(layerPath)
 								const { text } = phrase?.data || {}
 								return showLayer ? (
 									<div

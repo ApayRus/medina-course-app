@@ -136,9 +136,10 @@ const NumberInput: React.FC<InputNumberProps> = ({
 				aria-label={title}
 				placeholder={id}
 				value={value}
+				min={1}
 				onIonChange={onChange({ path, value })}
 				slot='end'
-				className='ion-text-right'
+				className='settingsNumberInput ion-text-right'
 			/>
 		</>
 	)
@@ -175,7 +176,7 @@ const SelectInput: React.FC<InputSelectProps> = ({
 				placeholder={id}
 				onIonChange={onChange({ path, value })}
 				value={value}
-				defaultValue={options[0]['id']}
+				// defaultValue={options[0]['id']}
 				slot='end'
 				aria-label={title}
 			>

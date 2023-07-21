@@ -59,5 +59,6 @@ Then you should place related to each layer files to path: `/content/folder/laye
 (remove from cors.json all tabs \t )
 
 ```bash
-gcloud storage buckets update gs://ismail-player.appspot.com --cors-file=cors.json
+gcloud storage buckets update gs://your-project.appspot.com --cors-file=cors.json
+```
 ````

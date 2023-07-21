@@ -9,8 +9,7 @@ import SettingsButton from '../SettingsButton'
 
 const NavigationButtons = () => {
 	const {
-		state: { flatTocs, prevItem, nextItem },
-		methods: { goNext, goPrev }
+		state: { flatTocs, prevItem, nextItem }
 	} = useContext(NavigationContext)
 
 	const flatTableOfContent = flatTocs?.[0]?.data
@@ -18,14 +17,14 @@ const NavigationButtons = () => {
 	return flatTableOfContent ? (
 		<>
 			{prevItem && (
-				<IonButton onClick={goPrev}>
+				<IonButton routerLink={prevItem.path}>
 					<IonIcon size='large' color='primary' icon={PreviousChapterIcon} />
 				</IonButton>
 			)}
 			<SettingsButton color='primary' />
 			<IonMenuButton color='primary' />
 			{nextItem && (
-				<IonButton onClick={goNext}>
+				<IonButton routerLink={nextItem.path}>
 					<IonIcon size='large' color='primary' icon={NextChapterIcon} />
 				</IonButton>
 			)}
