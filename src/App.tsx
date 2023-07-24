@@ -5,7 +5,7 @@ import {
 	setupIonicReact
 } from '@ionic/react'
 import { IonReactRouter } from '@ionic/react-router'
-import { Route } from 'react-router-dom'
+import { Redirect, Route } from 'react-router-dom'
 import Menu from './components/Navigation/Menu'
 
 /* Core CSS required for Ionic components to work properly */
@@ -49,7 +49,7 @@ const App: React.FC = () => {
 										<PageFrame />
 									</Route>
 									<Route path='/' exact>
-										<Main />
+										<Redirect to='/index' />
 									</Route>
 								</IonRouterOutlet>
 							</IonSplitPane>

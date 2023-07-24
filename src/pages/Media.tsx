@@ -2,7 +2,7 @@ import { IonContent, IonFooter, IonSpinner, IonToolbar } from '@ionic/react'
 import { useEffect, useContext, useRef } from 'react'
 import { useParams } from 'react-router'
 import { AppStateContext } from '../components/AppStateProvider'
-import { getPhrases } from '../utils/utils'
+import { getPhrases, parseSubs } from '../utils/utils'
 import { getContentLayers, getMediaLink } from '../api'
 import { PlayerContext } from 'react-wavesurfer-provider'
 import PlayerWavesurfer from '../components/PlayerWavesurfer'
@@ -18,7 +18,7 @@ const Media: React.FC = () => {
 	const phrasesContainerRef = useRef<HTMLIonContentElement>(null)
 
 	const {
-		state: { settings, configLoaded, isPageTransition },
+		state: { settings, configLoaded, tocsLoaded, isPageTransition },
 		methods: { getSetting, update: updateAppState, getDictationSettings }
 	} = useContext(AppStateContext)
 
@@ -35,12 +35,17 @@ const Media: React.FC = () => {
 		const loadData = async () => {
 			const mediaLink = await getMediaLink(path)
 			playerMethods.setMediaLink(mediaLink)
-			const contentLayers = await getContentLayers(settings, path)
-			layerMethods.setLayers(contentLayers)
+			const contentLayers = await getContentLayers(settings, path, 'txt')
+			const layers = contentLayers.map(elem => {
+				const { info, data } = elem
+				const phrases = parseSubs(data)
+				return { info, phrases }
+			})
+			layerMethods.setLayers(layers)
 			const phrases = getPhrases(contentLayers)
 			playerMethods.updatePhrases({ phrases })
 		}
-		if (configLoaded) {
+		if (configLoaded && tocsLoaded) {
 			loadData().then(() => {
 				if (playerState.isReady && isPageTransition) {
 					updateAppState({ isPageTransition: false })
@@ -53,7 +58,7 @@ const Media: React.FC = () => {
 				}
 			})
 		}
-	}, [path, configLoaded])
+	}, [path, configLoaded, tocsLoaded])
 
 	// auto open new page after playing was finished
 	useEffect(() => {

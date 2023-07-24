@@ -194,3 +194,16 @@
 .settingsNumberInput {
 	max-width: 3.5rem;
 }
+
+.htmlPage.page-index {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 100%;
+}
+
+.page-index .pageTitleBlock {
+	display: none;
+}

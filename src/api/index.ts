@@ -51,14 +51,15 @@ export const getConfig = async () => {
 
 export const getContentLayers = async (
 	layers: SettingsItem[],
-	path: string
+	path: string,
+	fileExtension: string
 ) => {
 	const layerInfoArray = layers.filter(
 		elem => elem.path.match('content/') && (elem.value || elem.main)
 	)
 
 	const paths = layerInfoArray.map(
-		layer => `${layer.path.replace('layers/', '')}/${path}.txt`
+		layer => `${layer.path.replace('layers/', '')}/${path}.${fileExtension}`
 	)
 
 	const layerDataArray = (await getFiles(paths)) as string[]
