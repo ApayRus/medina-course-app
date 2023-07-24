@@ -165,7 +165,8 @@
 
 .tocLayer,
 .pageTitleLayer,
-.phraseLayer {
+.phraseLayer,
+.htmlPhraseLayer {
 	display: flex;
 	align-items: center;
 }
