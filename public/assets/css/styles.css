@@ -221,11 +221,13 @@
 	font-size: 1.2rem;
 }
 
-.phraseLayer {
+.phraseLayer,
+.htmlPhraseLayer {
 	flex-direction: row-reverse;
 }
 
-.phraseLayer.ar {
+.phraseLayer.ar,
+.htmlPhraseLayer.ar {
 	direction: rtl;
 	flex-direction: row;
 }
