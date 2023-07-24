@@ -94,7 +94,8 @@
 
 .pageTitleLayer.layer-1,
 .tocLayer.layer-1,
-.phraseLayer.layer-1 {
+.phraseLayer.layer-1,
+.htmlPhraseLayer.layer-1 {
 	color: grey;
 	font-size: 0.8rem;
 }
@@ -246,4 +247,19 @@
 
 .pageTitleLayer {
 	margin-bottom: unset;
+}
+
+.htmlPhraseLayer.layer-1 .text h1,
+.htmlPhraseLayer.layer-1 .text h2,
+.htmlPhraseLayer.layer-1 .text h3 {
+	font-size: small;
+	margin: 0;
+}
+
+.htmlPage.page-index .htmlPhraseLayer {
+	justify-content: center;
+}
+
+.htmlPage.page-index .htmlPhraseLayer.ar {
+	color: var(--ion-color-primary);
 }
