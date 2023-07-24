@@ -1,12 +1,8 @@
-import {
-	IonCheckbox,
-	IonInput,
-	IonItem,
-	IonSelect,
-	IonSelectOption,
-	IonText
-} from '@ionic/react'
-import { Config, SelectOption, SettingsItem } from '../AppStateProvider'
+import { IonItem, IonText } from '@ionic/react'
+import { Config, SettingsItem } from '../AppStateProvider'
+import InputCheckbox from './InputCheckbox'
+import InputNumber from './InputNumber'
+import InputSelect from './InputSelect'
 
 interface Props {
 	content: Config
@@ -52,13 +48,13 @@ const CheckboxesTree: React.FC<Props> = ({
 					const inputElement = () => {
 						if (typeof value === 'number') {
 							return (
-								<NumberInput
+								<InputNumber
 									{...{ path, title, description, value, callback }}
 								/>
 							)
 						} else if (options.length > 0 && typeof value === 'string') {
 							return (
-								<SelectInput
+								<InputSelect
 									{...{ path, title, description, value, options, callback }}
 								/>
 							)
@@ -67,7 +63,7 @@ const CheckboxesTree: React.FC<Props> = ({
 							typeof value === 'undefined'
 						) {
 							return (
-								<CheckboxInput
+								<InputCheckbox
 									{...{
 										path,
 										title,
@@ -87,144 +83,3 @@ const CheckboxesTree: React.FC<Props> = ({
 }
 
 export default CheckboxesTree
-
-interface InputProps {
-	path: string
-	title: string
-	description?: string
-	callback: (event: any) => void
-}
-
-interface InputNumberProps extends InputProps {
-	value: number
-}
-
-interface InputSelectProps extends InputProps {
-	value: string
-	options: SelectOption[]
-}
-
-interface InputCheckboxProps extends InputProps {
-	value: boolean
-}
-
-const NumberInput: React.FC<InputNumberProps> = ({
-	path,
-	title,
-	description,
-	value,
-	callback
-}) => {
-	const pathArray = path.split('/')
-	const level = pathArray.length
-	const id = pathArray.at(-1)
-	const onChange = (props: any) => (event: any) => {
-		const {
-			target: { id: path, value }
-		} = event
-		callback({ path, value: +value })
-	}
-	return (
-		<>
-			<div className={`settingsLabel level-${level}`}>
-				<div className='title'>{title}</div>
-				<div className='description'>{description}</div>
-			</div>
-			<IonInput
-				id={path}
-				type='number'
-				aria-label={title}
-				placeholder={id}
-				value={value}
-				min={1}
-				onIonChange={onChange({ path, value })}
-				slot='end'
-				className='settingsNumberInput ion-text-right'
-			/>
-		</>
-	)
-}
-
-const SelectInput: React.FC<InputSelectProps> = ({
-	path,
-	title,
-	value,
-	description,
-	options,
-	callback
-}) => {
-	const pathArray = path.split('/')
-	const level = pathArray.length
-	const id = pathArray.at(-1)
-
-	const onChange = (props: any) => (event: any) => {
-		const {
-			target: { id: path, value }
-		} = event
-		callback({ path, value })
-	}
-
-	return (
-		<>
-			<div className={`settingsLabel level-${level}`}>
-				<div className='title'>{title}</div>
-				<div className='description'>{description}</div>
-			</div>
-			<IonSelect
-				id={path}
-				interface='popover'
-				placeholder={id}
-				onIonChange={onChange({ path, value })}
-				value={value}
-				// defaultValue={options[0]['id']}
-				slot='end'
-				aria-label={title}
-			>
-				{options.map((option, index) => {
-					const { id, title } = option
-					return (
-						<IonSelectOption
-							aria-label={title}
-							key={`option-${index}`}
-							value={id}
-						>
-							{title}
-						</IonSelectOption>
-					)
-				})}
-			</IonSelect>
-		</>
-	)
-}
-
-const CheckboxInput: React.FC<InputCheckboxProps> = ({
-	path,
-	title,
-	description,
-	value,
-	callback
-}) => {
-	const onChange = (props: any) => (event: any) => {
-		const {
-			target: { id: path, checked: value }
-		} = event
-		callback({ path, value })
-	}
-	const pathArray = path.split('/')
-	const level = pathArray.length
-	return (
-		<>
-			<div className={`settingsLabel level-${level}`}>
-				<div className='title'>{title}</div>
-				<div className='description'>{description}</div>
-			</div>
-			<IonCheckbox
-				id={path}
-				slot='end'
-				aria-label={title}
-				checked={Boolean(value)}
-				onIonChange={onChange({ path, value })}
-			></IonCheckbox>
-		</>
-	)
-}

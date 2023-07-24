@@ -7,6 +7,7 @@ import { PlayerProvider } from 'react-wavesurfer-provider'
 import { NavigationContext } from '../components/Navigation/NavigationProvider'
 import { NavItemType } from '../components/Navigation/types'
 import LayersProvider from '../components/Layers/Provider'
+import Html from './Html'
 
 export default function PageFrame() {
 	const { path = '' } = useParams<{ path: string }>()
@@ -29,11 +30,11 @@ export default function PageFrame() {
 			case 'richMedia':
 				return (
 					<PlayerProvider peaks={[]}>
-						<LayersProvider>
-							<Media />
-						</LayersProvider>
+						<Media />
 					</PlayerProvider>
 				)
+			case 'html':
+				return <Html />
 
 			default:
 				return <></>
@@ -43,7 +44,7 @@ export default function PageFrame() {
 	return (
 		<IonPage>
 			<Header {...{ title, layerName }} />
-			{contentByType(type)}
+			<LayersProvider>{contentByType(type)}</LayersProvider>
 		</IonPage>
 	)
 }

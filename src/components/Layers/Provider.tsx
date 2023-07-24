@@ -1,8 +1,7 @@
-import React, { createContext, useEffect, useState } from 'react'
+import React, { createContext, useState } from 'react'
 import { ContentLayer } from '../../api'
 import { SettingsItem } from '../AppStateProvider'
 import { Phrase } from 'react-wavesurfer-provider'
-import { parseSubs } from '../../utils/utils'
 
 // rename Context and Provider to smth meaningful, they will be imported in other components
 
@@ -26,7 +25,7 @@ interface State {
 }
 
 interface Methods {
-	setLayers: (contentLayers: ContentLayer[]) => void
+	setLayers: (layers: Layer[]) => void
 	updatePhrase: (props: UpdatePhraseProps) => void
 	mixPhrases: () => MixedPhrase[][]
 }
@@ -48,21 +47,10 @@ export const LayersContext = createContext<ContextType>(defaultContextValue)
 
 const defaultState = { layers: [] }
 
-const LayersProvider: React.FC<Props> = ({ children, contentLayersProp }) => {
+const LayersProvider: React.FC<Props> = ({ children }) => {
 	const [state, setState] = useState<State>(defaultState)
 
-	useEffect(() => {
-		if (contentLayersProp) {
-			setLayers(contentLayersProp)
-		}
-	}, [])
-
-	const setLayers = (contentLayers: ContentLayer[]) => {
-		const layers = contentLayers.map(elem => {
-			const { info, data } = elem
-			const phrases = parseSubs(data)
-			return { info, phrases }
-		})
+	const setLayers = (layers: Layer[]) => {
 		setState(oldState => ({ ...oldState, layers }))
 	}
 
