@@ -33,7 +33,9 @@ const PhrasesBlockHtml: React.FC = () => {
 								const showLayer = getSetting(layerPath)
 								const { text = '' } = phrase?.data || {}
 								return showLayer ? (
-									<div className={`htmlPhraseLayer ${layerName}`}>
+									<div
+										className={`htmlPhraseLayer ${layerName} layer-${layerIndex}`}
+									>
 										{showLayerName && (
 											<div className={`layerName`}>{layerName}</div>
 										)}

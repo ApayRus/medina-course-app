@@ -94,7 +94,8 @@
 
 .pageTitleLayer.layer-1,
 .tocLayer.layer-1,
-.phraseLayer.layer-1 {
+.phraseLayer.layer-1,
+.htmlPhraseLayer.layer-1 {
 	color: grey;
 	font-size: 0.8rem;
 }
