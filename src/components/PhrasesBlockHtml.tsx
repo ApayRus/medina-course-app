@@ -20,8 +20,8 @@ const PhrasesBlockHtml: React.FC = () => {
 
 				return (
 					<div
+						key={`phraseWrapper-${phraseIndex}`}
 						className={`htmlPhraseWrapper htmlPhrase-${phraseIndex}`}
-						key={`phrase-${phraseIndex}`}
 					>
 						<div className={`htmlPhrase`}>
 							{phraseBlock.map((phraseLayer, layerIndex) => {
@@ -34,6 +34,7 @@ const PhrasesBlockHtml: React.FC = () => {
 								const { text = '' } = phrase?.data || {}
 								return showLayer ? (
 									<div
+										key={`phraseLayer-${layerIndex}`}
 										className={`htmlPhraseLayer ${layerName} layer-${layerIndex}`}
 									>
 										{showLayerName && (

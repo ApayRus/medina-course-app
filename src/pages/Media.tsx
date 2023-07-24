@@ -58,6 +58,9 @@ const Media: React.FC = () => {
 				}
 			})
 		}
+		return () => {
+			layerMethods.setLayers([])
+		}
 	}, [path, configLoaded, tocsLoaded])
 
 	// auto open new page after playing was finished
