@@ -31,6 +31,9 @@ const Html: React.FC = () => {
 		if (configLoaded && tocsLoaded) {
 			loadData().then(() => {})
 		}
+		return () => {
+			layerMethods.setLayers([])
+		}
 	}, [path, configLoaded, tocsLoaded])
 
 	return tocsLoaded ? (
