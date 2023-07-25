@@ -4,7 +4,10 @@ import { PlayerContext } from 'react-wavesurfer-provider'
 import { AppStateContext } from '../AppStateProvider'
 
 const Speed = () => {
-	const { methods: playerMethods } = useContext(PlayerContext)
+	const {
+		methods: playerMethods,
+		state: { isReady: isPlayerReady }
+	} = useContext(PlayerContext)
 	const {
 		methods: { updateSetting, getSetting }
 	} = useContext(AppStateContext)
@@ -15,8 +18,10 @@ const Speed = () => {
 		updateSetting({ path: 'player/playbackRate', value })
 	}
 	useEffect(() => {
-		updatePlaybackRate(value)
-	}, [value])
+		if (isPlayerReady) {
+			updatePlaybackRate(value)
+		}
+	}, [value, isPlayerReady])
 	return (
 		<div className='playbackRate'>
 			<IonSelect

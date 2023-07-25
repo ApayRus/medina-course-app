@@ -142,7 +142,7 @@ export const scrollPhrases = ({
 	}
 	// const { height: videoHeight = 0 } =
 	// 	stickyPlayerContainerRef.current?.getBoundingClientRect() || {}
-	const currentPhraseY = phraseRefs.current[index].offsetTop
+	const currentPhraseY = phraseRefs?.current[index]?.offsetTop || 0
 	phrasesContainerRef?.current?.scrollToPoint(
 		null,
 		currentPhraseY + delta, // - videoHeight
