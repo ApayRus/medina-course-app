@@ -209,6 +209,25 @@
 .page-index .pageTitleBlock {
 	display: none;
 }
+.htmlPhraseLayer.layer-1 .text h1,
+.htmlPhraseLayer.layer-1 .text h2,
+.htmlPhraseLayer.layer-1 .text h3 {
+	font-size: small;
+	margin: 0;
+}
+
+.htmlPage.page-index .htmlPhraseLayer {
+	justify-content: center;
+}
+
+.playbackRate ion-select::part(icon) {
+	display: none;
+}
+
+.playbackRate ion-select::part(text) {
+	color: var(--ion-color-primary);
+	/* font-size: small; */
+}
 
 /* MY STYLES  */
 
@@ -247,17 +266,6 @@
 
 .pageTitleLayer {
 	margin-bottom: unset;
-}
-
-.htmlPhraseLayer.layer-1 .text h1,
-.htmlPhraseLayer.layer-1 .text h2,
-.htmlPhraseLayer.layer-1 .text h3 {
-	font-size: small;
-	margin: 0;
-}
-
-.htmlPage.page-index .htmlPhraseLayer {
-	justify-content: center;
 }
 
 .htmlPage.page-index .htmlPhraseLayer.ar {
