@@ -12,7 +12,7 @@ const Speed = () => {
 		methods: { updateSetting, getSetting }
 	} = useContext(AppStateContext)
 	const options = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2]
-	const value = getSetting('player/playbackRate') as number
+	const value = (getSetting('player/playbackRate') || 1) as number
 	const updatePlaybackRate = (value: number) => {
 		playerMethods.setPlaybackRate(value)
 		updateSetting({ path: 'player/playbackRate', value })
