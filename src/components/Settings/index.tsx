@@ -6,7 +6,7 @@ import { IonSpinner } from '@ionic/react'
 const Config: React.FC = () => {
 	const {
 		state: { settings, config, configLoaded },
-		methods: { updateSettings }
+		methods: { updateSetting }
 	} = useContext(AppStateContext)
 
 	interface CallbackProps {
@@ -15,7 +15,7 @@ const Config: React.FC = () => {
 	}
 
 	const callback = ({ path, value }: CallbackProps) => {
-		updateSettings({ path, value })
+		updateSetting({ path, value })
 	}
 
 	return (

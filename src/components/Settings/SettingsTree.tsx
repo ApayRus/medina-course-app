@@ -44,12 +44,21 @@ const CheckboxesTree: React.FC<Props> = ({
 					)
 				} else {
 					const { value } = settings.find(elem => elem.path === path) || {}
-					const { options = [] } = elem
+					const { options = [], min, max, step } = elem
 					const inputElement = () => {
 						if (typeof value === 'number') {
 							return (
 								<InputNumber
-									{...{ path, title, description, value, callback }}
+									{...{
+										path,
+										title,
+										description,
+										value,
+										callback,
+										min,
+										max,
+										step
+									}}
 								/>
 							)
 						} else if (options.length > 0 && typeof value === 'string') {

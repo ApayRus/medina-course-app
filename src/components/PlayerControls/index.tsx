@@ -2,6 +2,7 @@ import React from 'react'
 import ProgressBar from './ProgressBar'
 import PlayerButtons from './Buttons'
 import TimeIndicator from './TimeIndicator'
+import Speed from './Speed'
 
 const PlayerControls = () => {
 	return (
@@ -15,6 +16,7 @@ const PlayerControls = () => {
 				}}
 			>
 				<TimeIndicator />
+				<Speed />
 				<PlayerButtons />
 			</div>
 		</div>

@@ -3,6 +3,9 @@ import { InputProps } from './types'
 
 interface InputNumberProps extends InputProps {
 	value: number
+	min?: number
+	max?: number
+	step?: string
 }
 
 const NumberInput: React.FC<InputNumberProps> = ({
@@ -10,7 +13,10 @@ const NumberInput: React.FC<InputNumberProps> = ({
 	title,
 	description,
 	value,
-	callback
+	callback,
+	min,
+	max,
+	step
 }) => {
 	const pathArray = path.split('/')
 	const level = pathArray.length
@@ -33,7 +39,9 @@ const NumberInput: React.FC<InputNumberProps> = ({
 				aria-label={title}
 				placeholder={id}
 				value={value}
-				min={1}
+				min={min}
+				max={max}
+				step={step}
 				onIonChange={onChange({ path, value })}
 				slot='end'
 				className='settingsNumberInput ion-text-right'

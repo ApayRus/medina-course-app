@@ -26,6 +26,9 @@ export interface ConfigItem {
 	main?: boolean
 	value?: SettingsItemValue
 	options?: SelectOption[]
+	min?: number
+	max?: number
+	step?: string
 }
 
 export interface ConfigFolder {
@@ -46,7 +49,7 @@ export interface AppState {
 	isPageTransition: boolean // to know that page opened automatically, to run auto actions, e.g. playing
 }
 
-interface UpdateSettingsProps {
+interface updateSettingProps {
 	path: string
 	value: SettingsItemValue
 }
@@ -59,7 +62,7 @@ interface DictationSettings {
 
 interface Methods {
 	update: (newValues: Partial<AppState>) => void
-	updateSettings: ({ path, value }: UpdateSettingsProps) => void
+	updateSetting: ({ path, value }: updateSettingProps) => void
 	getSetting: (path: string) => SettingsItemValue
 	getDictationSettings: () => DictationSettings
 }
@@ -159,7 +162,7 @@ const AppStateProvider: React.FC<Props> = ({ children }) => {
 		})
 	}
 
-	const updateSettings = ({ path, value }: UpdateSettingsProps) => {
+	const updateSetting = ({ path, value }: updateSettingProps) => {
 		const { settings } = { ...state }
 		const itemIndex = settings.findIndex(elem => elem.path === path)
 		settings[itemIndex] = { ...settings[itemIndex], value }
@@ -180,7 +183,7 @@ const AppStateProvider: React.FC<Props> = ({ children }) => {
 
 	const contextValue: { state: AppState; methods: Methods } = {
 		state,
-		methods: { update, updateSettings, getSetting, getDictationSettings }
+		methods: { update, updateSetting, getSetting, getDictationSettings }
 	}
 
 	const loadingSpinner = (
